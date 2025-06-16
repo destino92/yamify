@@ -51,10 +51,6 @@ const RightPanelYam = ({ expandRightPanel }: Props) => {
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  // State to track light/dark mode
-  const [lightMode] = useState(false);
-
-
   const params = useParams();
   const yamName = params.name as string;
 

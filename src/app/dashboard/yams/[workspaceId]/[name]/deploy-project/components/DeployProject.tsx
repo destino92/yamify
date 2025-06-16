@@ -24,9 +24,6 @@ const DeployProject = ({ expandRightPanel }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const[lightMode]=useState(false)
-
-
   const router = useRouter();
   const { success, error: errorNotification } = useNotification();
 
@@ -39,6 +36,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
     async function getWorkspaces() {
       setLoading(true)
       try {
+        console.log('DeployProject: useEffect - Fetching YAM with slug:', slug);
         const data = await fetchYam({
           name: slug
         });
@@ -52,10 +50,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
       }
     }
     getWorkspaces();
-
-  }, [slug, errorNotification]);
-
-  }, [errorNotification, slug]);
+  }, [slug]); // errorNotification retiré des dépendances
 
   console.log(error);
 
