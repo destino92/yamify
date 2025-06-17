@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       allowedOrigins: [
-        'localhost:3000'
+        'localhost:3000','yamify.co'
       ]
     }
   },
