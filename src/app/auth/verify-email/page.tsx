@@ -8,7 +8,7 @@ import Link from 'next/link';
 import CreateAnimation from '@/components/Home/CreateAnimation';
 import AuthHeader from '../_components/AuthHeader';
 import "@/styles/AuthPage.css";
-import "@/styles/VerifyEmail.css";
+import "./VerifyEmail.css";
 
 const VerifyEmail = () => {
   const { isLoaded, isSignedIn } = useUser();
@@ -172,20 +172,21 @@ const VerifyEmail = () => {
   // Afficher l'état de chargement ou de vérification
   if (!isLoaded || verifying || verificationSuccess) {
     return (
-      <div className="auth-page">
-        <AuthHeader />
-        <div className="auth-container">
-          <CreateAnimation 
-            title={verificationSuccess ? "Email Verified!" : "Verifying..."}
-            loadingTxts={loadingTxts}
-            successBool={verificationSuccess}
-          />
-          {verificationSuccess && (
-            <div className="redirect-message">
-              <p>Redirecting to onboarding...</p>
-            </div>
-          )}
-        </div>
+      <div className="auth-section">
+        <section>
+          <div className="container">
+            <CreateAnimation 
+              title={verificationSuccess ? "Email Verified!" : "Verifying..."}
+              loadingTxts={loadingTxts}
+              successBool={verificationSuccess}
+            />
+            {verificationSuccess && (
+              <div className="redirect-message">
+                <p>Redirecting to onboarding...</p>
+              </div>
+            )}
+          </div>
+        </section>
       </div>
     );
   }
@@ -194,56 +195,66 @@ const VerifyEmail = () => {
   const allFieldsFilled = verificationCode.every(digit => digit !== '');
 
   return (
-    <div className="auth-page">
-      <AuthHeader />
-      <div className="auth-container">
-        <h1>Verify your email</h1>
-        <p className="subtitle">We've sent a 6-digit code to {emailAddress || 'your email'}</p>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <form onSubmit={handleSubmit} className="otp-form">
-          <div className="otp-inputs">
-            {verificationCode.map((digit, index) => (
-              <input
-                key={index}
-                ref={inputRefs[index]}
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleInputChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                onPaste={handlePaste}
-                className={`otp-input ${digit ? 'filled' : ''}`}
-                placeholder="•"
-                disabled={loading}
-              />
-            ))}
+    <div className="auth-section">
+      <section>
+        <div className="container">
+          <div className="back-icon" onClick={() => router.back()}>
+            <Image src="/svgs/arrow-left.svg" alt="Back" width={20} height={20} />
           </div>
           
-          <button 
-            type="submit" 
-            className="verify-button"
-            disabled={loading || verificationCode.some(digit => !digit)}
-          >
-            {loading ? 'Verifying...' : 'Verify Email'}
-          </button>
-        </form>
-        
-        <div className="resend-code">
-          <p>Didn't receive a code? </p>
-          <button 
-            type="button" 
-            onClick={handleResendCode}
-            disabled={loading}
-            className="resend-button"
-          >
-            Resend code
-          </button>
+          <h1>Verify OTP</h1>
+          <p className="subtitle w-full">Please enter the code that was sent to your <span className="email-address">{emailAddress || 'your email'}</span></p>
+          
+          {error && <div className="error-message">{error}</div>}
+          
+          <form onSubmit={handleSubmit} className="otp-form">
+            <div className="otp-inputs">
+              {verificationCode.map((digit, index) => (
+                <div key={index} className="otp-input-wrapper">
+                  <input
+                    ref={inputRefs[index]}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleInputChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    onPaste={handlePaste}
+                    className={`otp-input ${digit ? 'filled' : ''}`}
+                    placeholder="•"
+                    disabled={loading}
+                  />
+                </div>
+              ))}
+            </div>
+            
+            <button 
+              type="submit" 
+              className={allFieldsFilled ? 'active' : ''}
+              disabled={loading || !allFieldsFilled}
+            >
+              <div className="contain">
+                <span>{loading ? 'Verifying...' : 'Verify Email'}</span>
+                <span className="hover-text">{loading ? 'Verifying...' : 'Verify Email'}</span>
+              </div>
+            </button>
+          </form>
+          
+          <div className="resend-container">
+            <p>Didn't receive a code?{' '}
+              <button 
+                type="button" 
+                onClick={handleResendCode}
+                disabled={loading}
+                className="resend-link"
+              >
+                Retry
+              </button>
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
