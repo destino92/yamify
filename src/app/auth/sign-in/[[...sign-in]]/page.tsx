@@ -9,7 +9,7 @@ import Image from "next/image";
 import { OAuthStrategy } from "@clerk/types";
 import { useSignIn, useAuth } from "@clerk/nextjs";
 import { toast } from "react-hot-toast";
-
+import "@/app/auth/reset-password/ResetPassword.css"
 export default function SignIn() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -45,8 +45,15 @@ export default function SignIn() {
 
   return (
     <div className="auth-section">
+      <AuthHeader />
+        <p className="back-to-login">
+        Don't have an account?{' '}
+        <Link href="/auth/sign-up" >
+          Sign up
+        </Link>
+      </p>
       <section>
-        <AuthHeader />
+        
         <div className="container">
           <h1>Sign in</h1>
 

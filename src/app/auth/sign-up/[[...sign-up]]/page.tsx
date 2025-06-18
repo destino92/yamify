@@ -8,7 +8,7 @@ import Image from "next/image";
 import { OAuthStrategy } from "@clerk/types";
 import { useSignUp, useAuth } from "@clerk/nextjs";
 import { toast } from "react-hot-toast";
-
+import "@/app/auth/reset-password/ResetPassword.css"
 const countries = [
   {
     name: "Nigeria",
@@ -89,8 +89,15 @@ export default function SignUp() {
 
   return (
     <div className="auth-section">
+       <AuthHeader />
+        <p className="back-to-login">
+        Already have an account?{' '}
+        <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
+          Sign in
+        </a>
+      </p>
       <section>
-        <AuthHeader />
+       
         <div className="container">
           <h1>Create your account</h1>
 

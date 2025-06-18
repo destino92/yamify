@@ -29,7 +29,7 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/auth/verify-email
 1. Allez dans le [Tableau de bord Clerk](https://dashboard.clerk.dev)
 2. Naviguez vers "Email & SMS" > "Email Templates"
 3. Sélectionnez "Reset password"
-4. Dans "Redirect URL", entrez : `https://votredomaine.com/reset-password/verify`
+4. Dans "Redirect URL", entrez : `https://votredomaine.com/auth/reset-password/verify`
 
 ### 2. Personnaliser l'email (optionnel)
 1. Dans le même écran, personnalisez :

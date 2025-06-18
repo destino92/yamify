@@ -4,9 +4,10 @@ import React, { useState, useEffect } from "react";
 import AuthHeader from "../_components/AuthHeader";
 import "@/styles/AuthPage.css";
 import "./ResetPassword.css";
+import toast from 'react-hot-toast';
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useClerk } from "@clerk/nextjs";
+import { useSignIn } from "@clerk/nextjs";
 import CreateAnimation from "@/components/Home/CreateAnimation";
 
 
@@ -17,7 +18,7 @@ export default function ResetPasswordPage() {
   const [success, setSuccess] = useState(false);
   const [sending, setSending] = useState(false);
   const router = useRouter();
-  const { client } = useClerk();
+  const { isLoaded, signIn } = useSignIn();
   
   // Messages pour l'animation de chargement
   const loadingMessages = [
@@ -28,21 +29,25 @@ export default function ResetPasswordPage() {
 
   const handleResend = async (e: React.MouseEvent) => {
     e.preventDefault();
+    if (!isLoaded || !signIn) return;
+    
     setLoading(true);
     setError("");
     
     try {
       // Envoyer à nouveau l'email de réinitialisation via Clerk
-      await client.signIn.create({
+      await signIn.create({
+        strategy: "reset_password_email_code",
         identifier: email,
       });
       
       // Afficher un message de succès
       setError("");
-      alert("Reset link has been resent to your email.");
-    } catch (err) {
+      toast.success("Reset link has been resent to your email.");
+    } catch (err: any) {
       console.error("Error resending reset link:", err);
-      setError("Failed to resend email. Please try again.");
+      const errorMessage = err.errors?.[0]?.message || "Failed to resend email. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -50,27 +55,28 @@ export default function ResetPasswordPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isLoaded || !signIn) return;
+    
     setLoading(true);
     setError("");
     setSending(true);
     
-    // Simulation d'envoi d'email avec délai pour l'animation
-    setTimeout(async () => {
-      try {
-        // Envoyer l'email de réinitialisation via Clerk
-        await client.signIn.create({
-          identifier: email,
-        });
-        
-        setSuccess(true);
-      } catch (err) {
-        console.error("Error requesting password reset:", err);
-        setError("Une erreur est survenue. Veuillez réessayer.");
-      } finally {
-        setLoading(false);
-        setSending(false);
-      }
-    }, 2000); // Délai pour l'animation
+    try {
+      // Envoyer l'email de réinitialisation via Clerk
+      await signIn.create({
+        strategy: "reset_password_email_code",
+        identifier: email,
+      });
+      
+      setSuccess(true);
+    } catch (err: any) {
+      console.error("Error requesting password reset:", err);
+      const errorMessage = err.errors?.[0]?.message || "An error occurred. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+      setSending(false);
+    }
   };
 
   if (sending) {
@@ -80,7 +86,7 @@ export default function ResetPasswordPage() {
         <AuthHeader />
                 <p className="back-to-login">
                   Remember your password?{' '}
-                  <a href="/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
+                  <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
                     Sign in
                   </a>
                 </p>
@@ -106,7 +112,7 @@ export default function ResetPasswordPage() {
         <AuthHeader />
                 <p className="back-to-login">
                   Remember your password?{' '}
-                  <a href="/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
+                  <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
                     Sign in
                   </a>
                 </p> 
@@ -172,7 +178,7 @@ export default function ResetPasswordPage() {
                 <AuthHeader />
                 <p className="back-to-login">
                   Remember your password?{' '}
-                  <a href="/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
+                  <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
                     Sign in
                   </a>
                 </p>
