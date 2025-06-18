@@ -5,6 +5,8 @@ const isPublicRoute = createRouteMatcher([
   "/",
   "/auth/sign-in(.*)",
   "/auth/sign-up(.*)",
+  "/auth/reset-password(.*)",
+  "/auth/new-password(.*)",
 ]);
 const isOnboardingRoute = createRouteMatcher(["/auth/onboarding"]);
 
