@@ -23,7 +23,7 @@ const AuthHeader = () => {
           width={20}
           height={25.333}
         />
-        <h1>Yamify</h1>
+        <h1 className="text-white">Yamify</h1>
       </Link>
 
       {/* pathname !== "/auth/sign-in" ? (

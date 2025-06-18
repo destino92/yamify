@@ -1,16 +1,29 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import AuthHeader from "../../_components/AuthHeader";
 import "@/styles/AuthPage.css";
 import Image from "next/image";
 import { OAuthStrategy } from "@clerk/types";
-import { useSignIn } from "@clerk/nextjs";
-
+import { useSignIn, useAuth } from "@clerk/nextjs";
+import { toast } from "react-hot-toast";
+import "@/app/auth/reset-password/ResetPassword.css"
 export default function SignIn() {
-  const { signIn } = useSignIn();
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { signIn, isLoaded } = useSignIn();
+  const { isSignedIn } = useAuth();
 
-  if (!signIn) return null;
+  // Rediriger si déjà connecté
+  if (isSignedIn) {
+    router.push('/dashboard');
+    return null;
+  }
+
+  if (!signIn || !isLoaded) return null;
 
   const signInWithSocial = (strategy: OAuthStrategy) => {
     return signIn
@@ -32,8 +45,15 @@ export default function SignIn() {
 
   return (
     <div className="auth-section">
+      <AuthHeader />
+        <p className="back-to-login">
+        Don't have an account?{' '}
+        <Link href="/auth/sign-up" >
+          Sign up
+        </Link>
+      </p>
       <section>
-        <AuthHeader />
+        
         <div className="container">
           <h1>Sign in</h1>
 
@@ -54,16 +74,57 @@ export default function SignIn() {
             </div>
           </div>
 
-          {/* <div className="line-wrap">
+          <div className="line-wrap">
             <div className="line"></div>
             <p>OR</p>
             <div className="line"></div>
           </div>
 
-          <form action="">
+          <form 
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!signIn) return;
+              
+              const formData = new FormData(e.currentTarget);
+              const email = formData.get('email') as string;
+              const password = formData.get('password') as string;
+
+              if (!email || !password) {
+                toast.error('Please fill in all required fields');
+                return;
+              }
+
+
+              try {
+                setIsLoading(true);
+                
+                // Tenter de se connecter
+                const result = await signIn.create({
+                  identifier: email,
+                  password,
+                });
+
+                if (result.status === 'needs_first_factor') {
+                  // Gérer la vérification à deux facteurs si nécessaire
+                  router.push('/auth/verify');
+                } else {
+                  // Redirection après connexion réussie
+                  router.push('/dashboard');
+                }
+                
+              } catch (err: any) {
+                console.error('Error during sign in:', err);
+                const errorMessage = err.errors?.[0]?.message || 'Invalid email or password';
+                toast.error(errorMessage);
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            className="auth-form"
+          >
             <div className="label">
               <div className="left">
-                <label htmlFor="">Email address</label>
+                <label htmlFor="email">Email address</label>
               </div>
               <div className="right">
                 <input
@@ -71,6 +132,7 @@ export default function SignIn() {
                   name="email"
                   placeholder="Enter your email address"
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -85,35 +147,42 @@ export default function SignIn() {
                     name="password"
                     placeholder="Enter your password"
                     required
+                    disabled={isLoading}
                   />
                   <Image
-                    onClick={() => setShowPassword((prev) => !prev)}
+                    onClick={() => !isLoading && setShowPassword((prev) => !prev)}
                     src={
                       showPassword ? "/svgs/eyeopen.svg" : "/svgs/eyeopen.svg"
                     }
                     alt="Toggle password visibility"
                     height={15}
                     width={15}
+                    style={{ cursor: 'pointer' }}
                   />
                 </div>
               </div>
             </div>
 
-            <button type="submit">
-              <div className="contain">
-                <span>Sign in</span>
-                <span className="hover-text">Sign in</span>
-              </div>
-            </button>
+            <div className="btn-wrap">
+              <button 
+                type="submit" 
+                className={`submit-button ${isLoading ? 'loading' : ''}`}
+                disabled={isLoading}
+              >
+                <div className="contain">
+                  <span>{isLoading ? 'Signing in...' : 'Sign in'}</span>
+                  <span className="hover-text">{isLoading ? 'Signing in...' : 'Sign in'}</span>
+                </div>
+              </button>
+            </div>
           </form> 
 
           <div className="txt">
-            Forgot your password?
+            Forgot your password?{' '}
             <span>
-              <Link href="">Reset it</Link>
+              <Link href="/auth/reset-password">Reset it</Link>
             </span>
           </div>
-          */}
         </div>
       </section>
     </div>
