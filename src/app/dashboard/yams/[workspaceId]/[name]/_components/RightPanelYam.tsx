@@ -372,8 +372,8 @@ const RightPanelYam = ({ expandRightPanel, setShowAiModal }: Props) => {
                         </div>
                       </div>
                     )}
-            </div>
-        }
+          </div>
+        )}
       </div>
     </div>
   );
