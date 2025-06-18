@@ -7,6 +7,7 @@ import CreateYamDialog from "../../../_components/CreateYamDialog";
 import RightPanelYam from "./_components/RightPanelYam";
 import { SelectWorkspace } from "@/types/server";
 import fetchWorkspaceList from "@/libs/queries/fetch-workspace-list";
+import AiChatModal from "@/app/dashboard/_components/AiChatModal";
 
 export default function YamPage() {
   const [expandRightPanel, setExpandRightPanel] = useState(false);
@@ -14,18 +15,19 @@ export default function YamPage() {
   const [workspaces, setWorkspaces] = useState<SelectWorkspace[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showAiModal, setShowAiModal] = useState(false);
 
   useEffect(() => {
     async function getWorkspaces() {
-      setLoading(true)
+      setLoading(true);
       try {
         const data = await fetchWorkspaceList();
         setWorkspaces(data);
-        setLoading(false)
+        setLoading(false);
       } catch (err) {
         console.error(err);
-        setError('Could not load workspaces. Please try again later.');
-        setLoading(false)
+        setError("Could not load workspaces. Please try again later.");
+        setLoading(false);
       }
     }
     getWorkspaces();
@@ -44,19 +46,25 @@ export default function YamPage() {
     <div className="dashboard">
       {showYamDialog && (
         <CreateYamDialog
-        workspaces={workspaces}
+          workspaces={workspaces}
           loadingTxts={loadingTxts}
           setShowYamDialog={setShowYamDialog}
         />
       )}
+      {showAiModal && <AiChatModal setShowAiModal={setShowAiModal} />}
       <section>
-        {!loading && <LeftPanel
-        workspaces={workspaces}
-          setShowYamDialog={setShowYamDialog}
+        {!loading && (
+          <LeftPanel
+            workspaces={workspaces}
+            setShowYamDialog={setShowYamDialog}
+            expandRightPanel={expandRightPanel}
+            setExpandRightPanel={setExpandRightPanel}
+          />
+        )}
+        <RightPanelYam
           expandRightPanel={expandRightPanel}
-          setExpandRightPanel={setExpandRightPanel}
-        />}
-        <RightPanelYam expandRightPanel={expandRightPanel} />
+          setShowAiModal={setShowAiModal}
+        />
       </section>
     </div>
   );

@@ -15,6 +15,7 @@ import ProjectCard from "./ProjectCard";
 
 type Props = {
   expandRightPanel: boolean;
+  setShowAiModal: (Callback: boolean) => void;
 };
 
 // const yamData = [
@@ -45,7 +46,7 @@ type Props = {
 //   workspace: string;
 // }
 
-const RightPanelYam = ({ expandRightPanel }: Props) => {
+const RightPanelYam = ({ expandRightPanel, setShowAiModal }: Props) => {
   const [yam, setYam] = useState<SelectYam>();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -58,17 +59,17 @@ const RightPanelYam = ({ expandRightPanel }: Props) => {
 
   useEffect(() => {
     async function getWorkspaces() {
-      setLoading(true)
+      setLoading(true);
       try {
         const data = await fetchYam({
-          name: slug
+          name: slug,
         });
         setYam(data);
-        setLoading(false)
+        setLoading(false);
       } catch (err) {
         console.error(err);
-        setError('Could not load yam. Please try again later.');
-        setLoading(false)
+        setError("Could not load yam. Please try again later.");
+        setLoading(false);
       }
     }
     getWorkspaces();
@@ -76,7 +77,7 @@ const RightPanelYam = ({ expandRightPanel }: Props) => {
 
   console.log(error);
 
-  if(!yam) {
+  if (!yam) {
     return null;
   }
 
@@ -105,9 +106,9 @@ const RightPanelYam = ({ expandRightPanel }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader />
+        <DashboardHeader setShowAiModal={setShowAiModal} />
 
-        {!loading && 
+        {!loading && (
           <div className="section-yam">
             <nav>
               <div className="wrap">
@@ -188,7 +189,11 @@ const RightPanelYam = ({ expandRightPanel }: Props) => {
                       </div>
                     </div>
                     <div className="contain">
-                      <div className="txt-content" style={{cursor: "pointer"}} onClick={handleDownloadKubeconfig}>
+                      <div
+                        className="txt-content"
+                        style={{ cursor: "pointer" }}
+                        onClick={handleDownloadKubeconfig}
+                      >
                         <h4>Kubeconfig</h4>
                         <p style={{ color: "#DD9A38" }}>Click to download</p>
                       </div>

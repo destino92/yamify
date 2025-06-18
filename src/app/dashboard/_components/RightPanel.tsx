@@ -10,19 +10,24 @@ import { useUser } from "@clerk/nextjs";
 
 type Props = {
   expandRightPanel: boolean;
-  workspaces: SelectWorkspace[]
+  setShowAiModal: (Callback: boolean) => void;
+  workspaces: SelectWorkspace[];
 };
 
-const RightPanel = ({ expandRightPanel, workspaces }: Props) => {
+const RightPanel = ({
+  expandRightPanel,
+  workspaces,
+  setShowAiModal,
+}: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   // const mainInputRef = useRef<HTMLInputElement>(null);
   const today = new Date();
-  const formattedToday = new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',   // e.g. "Thursday"
-    month: 'long',     // e.g. "May"
-    day: 'numeric',    // e.g. "6"
+  const formattedToday = new Intl.DateTimeFormat("en-US", {
+    weekday: "long", // e.g. "Thursday"
+    month: "long", // e.g. "May"
+    day: "numeric", // e.g. "6"
   }).format(today);
-  const { user } = useUser()
+  const { user } = useUser();
 
   // const [roleCareer, setRoleCareer] = useState<string | null>(null);
   // const [mainImage, setMainImage] = useState("");
@@ -87,13 +92,13 @@ const RightPanel = ({ expandRightPanel, workspaces }: Props) => {
     return () => container.removeEventListener("scroll", syncScrollPosition);
   }, []);
 
-  if(!user) return
+  if (!user) return;
 
   return (
     <div className={`right-panel ${expandRightPanel && "not-expand"}`}>
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader />
+        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         <div className="section">
           <div className="intro-welcome">
