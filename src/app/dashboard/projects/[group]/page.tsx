@@ -7,6 +7,7 @@ import CreateYamDialog from "../../_components/CreateYamDialog";
 import RightPanelProjects from "./components/RightPanelProjects";
 import fetchWorkspaceList from "@/libs/queries/fetch-workspace-list";
 import { SelectWorkspace } from "@/types/server";
+import AiChatModal from "../../_components/AiChatModal";
 
 export default function YamsPage() {
   const [expandRightPanel, setExpandRightPanel] = useState(false);
@@ -14,6 +15,7 @@ export default function YamsPage() {
   const [workspaces, setWorkspaces] = useState<SelectWorkspace[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showAiModal, setShowAiModal] = useState(false);
 
   useEffect(() => {
     async function getWorkspaces() {
@@ -51,18 +53,23 @@ export default function YamsPage() {
           setShowYamDialog={setShowYamDialog}
         />
       )}
-      {!loading && <section>
-        <LeftPanel
-          setShowYamDialog={setShowYamDialog}
-          expandRightPanel={expandRightPanel}
-          setExpandRightPanel={setExpandRightPanel}
-          workspaces={workspaces}
-        />
-        <RightPanelProjects
-          expandRightPanel={expandRightPanel}
-          // setShowYamDialog={setShowYamDialog}
-        />
-      </section>}
+      {showAiModal && <AiChatModal setShowAiModal={setShowAiModal} />}
+
+      {!loading && (
+        <section>
+          <LeftPanel
+            setShowYamDialog={setShowYamDialog}
+            expandRightPanel={expandRightPanel}
+            setExpandRightPanel={setExpandRightPanel}
+            workspaces={workspaces}
+          />
+          <RightPanelProjects
+            expandRightPanel={expandRightPanel}
+            setShowAiModal={setShowAiModal}
+            // setShowYamDialog={setShowYamDialog}
+          />
+        </section>
+      )}
     </div>
   );
 }

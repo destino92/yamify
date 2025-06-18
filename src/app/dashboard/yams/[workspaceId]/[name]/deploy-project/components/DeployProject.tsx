@@ -6,24 +6,27 @@ import { useEffect, useState } from "react";
 import { SelectYam } from "@/types/server";
 import { useParams } from "next/navigation";
 import fetchYam from "@/libs/queries/fetch-yam";
-import { deployCodeServerProjectAction, deployWordpressProjectAction, deployN8nProjectAction } from "@/app/dashboard/_actions";
+import {
+  deployCodeServerProjectAction,
+  deployWordpressProjectAction,
+  deployN8nProjectAction,
+} from "@/app/dashboard/_actions";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/hooks/useNotification";
 import { NotificationContainer } from "@/components/Notification";
 import CreateAnimation from "@/components/Home/CreateAnimation";
 
-
 type Props = {
   expandRightPanel: boolean;
   setShowYamDialog: (Callback: boolean) => void;
+  setShowAiModal: (Callback: boolean) => void;
 };
 
-const DeployProject = ({ expandRightPanel }: Props) => {
+const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
   const [yam, setYam] = useState<SelectYam>();
   const [showAnimation, setShowAnimation] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-
   const router = useRouter();
   const { success, error: errorNotification } = useNotification();
 
@@ -34,19 +37,19 @@ const DeployProject = ({ expandRightPanel }: Props) => {
 
   useEffect(() => {
     async function getWorkspaces() {
-      setLoading(true)
+      setLoading(true);
       try {
-        console.log('DeployProject: useEffect - Fetching YAM with slug:', slug);
+        console.log("DeployProject: useEffect - Fetching YAM with slug:", slug);
         const data = await fetchYam({
-          name: slug
+          name: slug,
         });
         setYam(data);
-        setLoading(false)
+        setLoading(false);
       } catch (err) {
         console.error(err);
-        setError('Could not load yam. Please try again later.');
-        errorNotification('Could not load yam. Please try again later.');
-        setLoading(false)
+        setError("Could not load yam. Please try again later.");
+        errorNotification("Could not load yam. Please try again later.");
+        setLoading(false);
       }
     }
     getWorkspaces();
@@ -54,28 +57,28 @@ const DeployProject = ({ expandRightPanel }: Props) => {
 
   console.log(error);
 
-  if(!yam) {
+  if (!yam) {
     return null;
   }
 
   const handleDeployWordPress = async () => {
     if (!yam) return;
-    
+
     setShowAnimation(true);
-    
+
     try {
       const result = await deployWordpressProjectAction({
         name: `wordpress-${Date.now()}`,
-        namespace: 'default',
+        namespace: "default",
         yamId: yam.id,
-        workspaceId: yam.workspaceId
+        workspaceId: yam.workspaceId,
       });
-      
+
       if (result.success) {
         success("WordPress deployment created successfully!");
         setShowAnimation(false);
         setTimeout(() => {
-          router.back()
+          router.back();
         }, 5000);
       } else if (result.error) {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
@@ -92,28 +95,28 @@ const DeployProject = ({ expandRightPanel }: Props) => {
 
   const handleDeployCodeServer = async () => {
     if (!yam) return;
-    
+
     setShowAnimation(true);
-    
+
     try {
       const result = await deployCodeServerProjectAction({
         name: `codeserver-${Date.now()}`,
-        namespace: 'default',
+        namespace: "default",
         yamId: yam.id,
-        workspaceId: yam.workspaceId
+        workspaceId: yam.workspaceId,
       });
-      
+
       if (result.success) {
         success("CodeServer deployment created successfully!");
         setShowAnimation(false);
         setTimeout(() => {
-          router.back()
+          router.back();
         }, 5000);
       } else if (result.error) {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
         setShowAnimation(false);
         console.error("CodeServer deployment error:", result.error);
-        errorNotification( result.error);
+        errorNotification(result.error);
       }
     } catch (error) {
       setShowAnimation(false);
@@ -130,16 +133,16 @@ const DeployProject = ({ expandRightPanel }: Props) => {
     try {
       const result = await deployN8nProjectAction({
         name: `n8n-${Date.now()}`,
-        namespace: 'default',
+        namespace: "default",
         yamId: yam.id,
-        workspaceId: yam.workspaceId
+        workspaceId: yam.workspaceId,
       });
 
       if (result.success) {
         success("n8n deployment created successfully!");
         setShowAnimation(false);
         setTimeout(() => {
-          router.back()
+          router.back();
         }, 5000);
       } else if (result.error) {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
@@ -158,7 +161,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
     "Provisioning resources...",
     "Deploying your app...",
     "Finalizing setup...",
-    "Almost done!"
+    "Almost done!",
   ];
 
   const animationTitle = "We’re preparing your deployment—hang tight!";
@@ -171,50 +174,49 @@ const DeployProject = ({ expandRightPanel }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader />
+        <DashboardHeader setShowAiModal={setShowAiModal} />
 
-        {
-        !loading && <div className="section-deploy">
-          <div onClick={() => router.back()} className="back-btn">
-            <div className="wrap">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="15"
-                height="15"
-                viewBox="0 0 15 15"
-                fill="none"
-              >
-                <path
-                  d="M11.875 7.5H3.125M3.125 7.5L7.5 11.875M3.125 7.5L7.5 3.125"
-                  stroke="#B8B8B8"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+        {!loading && (
+          <div className="section-deploy">
+            <div onClick={() => router.back()} className="back-btn">
+              <div className="wrap">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 15 15"
+                  fill="none"
+                >
+                  <path
+                    d="M11.875 7.5H3.125M3.125 7.5L7.5 11.875M3.125 7.5L7.5 3.125"
+                    stroke="#B8B8B8"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
 
-              <p>Go back to Yam</p>
-            </div>
-          </div>
-          
-          <div className="deployment-container">
-            <div className="desc">
-              <h1>Start building something new.</h1>
-              <p>
-                Deploy your apps installed from marketplace or create a new
-                pipeline.
-              </p>
+                <p>Go back to Yam</p>
+              </div>
             </div>
 
-            <div className="building">
-              <div className="build marketplace">
-                <h2>Deploy from Marketplace</h2>
+            <div className="deployment-container">
+              <div className="desc">
+                <h1>Start building something new.</h1>
+                <p>
+                  Deploy your apps installed from marketplace or create a new
+                  pipeline.
+                </p>
+              </div>
 
-                <p>Choose from a growing library of production-ready apps</p>
+              <div className="building">
+                <div className="build marketplace">
+                  <h2>Deploy from Marketplace</h2>
 
-                <div className="container">
-                  { showAnimation ?
-                    (
+                  <p>Choose from a growing library of production-ready apps</p>
+
+                  <div className="container">
+                    {showAnimation ? (
                       <CreateAnimation
                         successBool={showAnimation}
                         loadingTxts={loadingTxts}
@@ -223,10 +225,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
                       />
                     ) : (
                       <div className="apps">
-                        <div
-                          className="app"
-                          onClick={handleDeployWordPress}
-                        >
+                        <div className="app" onClick={handleDeployWordPress}>
                           <Image
                             src="/svgs/wordpress.svg"
                             alt=""
@@ -237,34 +236,51 @@ const DeployProject = ({ expandRightPanel }: Props) => {
                           <div className="content">
                             <h4>Wordpress</h4>
 
-                            <div className="txt">Everything you need to build and grow any website—all in one place.</div>
+                            <div className="txt">
+                              Everything you need to build and grow any
+                              website—all in one place.
+                            </div>
                           </div>
                         </div>
                         <div className="app" onClick={handleDeployN8n}>
-                          <Image src="/svgs/n8n.svg" alt="" width={24} height={24} />
+                          <Image
+                            src="/svgs/n8n.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                          />
 
                           <div className="content">
                             <h4>n8n</h4>
 
-                            <div className="txt">Flexible AI workflow automation for technical teams.</div>
+                            <div className="txt">
+                              Flexible AI workflow automation for technical
+                              teams.
+                            </div>
                           </div>
                         </div>
                         <div className="app" onClick={handleDeployCodeServer}>
-                          <Image src="/svgs/code-server.svg" alt="" width={24} height={24} />
+                          <Image
+                            src="/svgs/code-server.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                          />
 
                           <div className="content">
                             <h4>VS Code</h4>
 
-                            <div className="txt">Run VS Code and access it in the browser.</div>
+                            <div className="txt">
+                              Run VS Code and access it in the browser.
+                            </div>
                           </div>
                         </div>
                       </div>
-                    )
-                  }
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* <div className="build pipeline">
+                {/* <div className="build pipeline">
                 <h2>Deploy from Pipeline</h2>
 
                 <div className="static">
@@ -290,10 +306,10 @@ const DeployProject = ({ expandRightPanel }: Props) => {
                   </div>
                 </div>
               </div> */}
+              </div>
             </div>
           </div>
-        </div>
-        }
+        )}
       </div>
       <NotificationContainer />
     </div>

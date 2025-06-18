@@ -13,9 +13,10 @@ import Link from "next/link";
 
 type Props = {
   expandRightPanel: boolean;
+  setShowAiModal: (Callback: boolean) => void;
 };
 
-const RightPanelProjects = ({ expandRightPanel }: Props) => {
+const RightPanelProjects = ({ expandRightPanel, setShowAiModal }: Props) => {
   // const [projectExists, setProjectExists] = useState(true);
 
   return (
@@ -26,7 +27,7 @@ const RightPanelProjects = ({ expandRightPanel }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader />
+        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         {true ? (
           <div className="section-projects">

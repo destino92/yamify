@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 type Props = {
   expandRightPanel: boolean;
   setShowYamDialog: (Callback: boolean) => void;
+  setShowAiModal: (Callback: boolean) => void;
 };
 
-const DeployProject = ({ expandRightPanel }: Props) => {
+const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
   const router = useRouter();
 
   return (
@@ -22,7 +23,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader />
+        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         <div className="section-deploy">
           <div onClick={() => router.back()} className="back-btn">

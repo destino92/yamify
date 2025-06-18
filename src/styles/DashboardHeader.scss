@@ -1,4 +1,4 @@
-.header {
+.dashboard-header {
   width: 100%;
   position: fixed;
   top: 0;
@@ -13,20 +13,24 @@
   border: 1px solid var(--Default-Dark-Ash, #232323);
   background: var(--Default-Light-Black, #1e1e1e);
 
-  .wrap {
+  .wrap-icons {
     display: flex;
     align-items: center;
 
-    .notification {
+    .div-contain {
       padding: 0 20px;
       height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 10px;
+      cursor: pointer;
       border-left: 1px solid var(--Default-Dark-Ash, #232323);
       border-right: 1px solid var(--Default-Dark-Ash, #232323);
-      cursor: pointer;
+      width: fit-content;
+
+      &.ai-w {
+        margin-right: 10px;
+      }
     }
 
     .profile-contain {
