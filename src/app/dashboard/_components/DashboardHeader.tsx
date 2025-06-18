@@ -23,18 +23,27 @@ const dropDownVariants = {
   exit: { opacity: 0, y: -30, transition: { duration: 0.2 } },
 };
 
-const DashboardHeader = () => {
-  const { user } = useUser()
-  const { signOut } = useClerk()
+type Props = {
+  setShowAiModal: (Callback: boolean) => void;
+};
+
+const DashboardHeader = ({ setShowAiModal }: Props) => {
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const [showProfileModal, setShowProfileModal] = useState(false);
 
-  const handleLogout = () => {signOut({ redirectUrl: '/' })};
+  const handleLogout = () => {
+    signOut({ redirectUrl: "/" });
+  };
 
   return (
-    <div className="header">
-      <div className="wrap">
-        <div className="notification">
+    <div className="dashboard-header">
+      <div className="wrap-icons">
+        <div className="notification div-contain">
           <Image src="/svgs/notification.svg" alt="" width={15} height={15} />
+        </div>
+        <div className="ai-w div-contain" onClick={() => setShowAiModal(true)}>
+          <Image src="/svgs/yamifyai.svg" alt="" width={15} height={15} />
         </div>
         <div className="profile-contain">
           <div

@@ -8,10 +8,12 @@ import CreateYamDialog from "./_components/CreateYamDialog";
 import CreateWorkspaceDialog from "./_components/CreateWorkspaceDialog";
 import fetchWorkspaceList from "@/libs/queries/fetch-workspace-list";
 import { SelectWorkspace } from "@/types/server";
+import AiChatModal from "./_components/AiChatModal";
 
 export default function Dashboard() {
   const [expandRightPanel, setExpandRightPanel] = useState(false);
   const [showYamDialog, setShowYamDialog] = useState(false);
+  const [showAiModal, setShowAiModal] = useState(false);
   const [showWorkspaceDialog, setShowWorkspaceDialog] = useState(false);
   const [workspaces, setWorkspaces] = useState<SelectWorkspace[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -19,15 +21,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function getWorkspaces() {
-      setLoading(true)
+      setLoading(true);
       try {
         const data = await fetchWorkspaceList();
         setWorkspaces(data);
-        setLoading(false)
+        setLoading(false);
       } catch (err) {
         console.error(err);
-        setError('Could not load workspaces. Please try again later.');
-        setLoading(false)
+        setError("Could not load workspaces. Please try again later.");
+        setLoading(false);
       }
     }
     getWorkspaces();
@@ -66,17 +68,24 @@ export default function Dashboard() {
           setShowYamDialog={setShowWorkspaceDialog}
         />
       )}
+      {showAiModal && <AiChatModal setShowAiModal={setShowAiModal} />}
 
-      {!loading && <section>
-        <LeftPanel
-          expandRightPanel={expandRightPanel}
-          setExpandRightPanel={setExpandRightPanel}
-          setShowYamDialog={setShowYamDialog}
-          setShowWorkspaceDialog={setShowWorkspaceDialog}
-          workspaces={workspaces}
-        />
-        <RightPanel workspaces={workspaces} expandRightPanel={expandRightPanel} />
-      </section>}
+      {!loading && (
+        <section>
+          <LeftPanel
+            expandRightPanel={expandRightPanel}
+            setExpandRightPanel={setExpandRightPanel}
+            setShowYamDialog={setShowYamDialog}
+            setShowWorkspaceDialog={setShowWorkspaceDialog}
+            workspaces={workspaces}
+          />
+          <RightPanel
+            workspaces={workspaces}
+            expandRightPanel={expandRightPanel}
+            setShowAiModal={setShowAiModal}
+          />
+        </section>
+      )}
     </div>
   );
 }

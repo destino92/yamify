@@ -1,4 +1,4 @@
-.header {
+.dashboard-header {
   width: 100%;
   position: fixed;
   top: 0;
@@ -13,29 +13,33 @@
   border: 1px solid var(--Default-Dark-Ash, #232323);
   background: var(--Default-Light-Black, #1e1e1e);
 }
-.header .wrap {
+.dashboard-header .wrap-icons {
   display: flex;
   align-items: center;
 }
-.header .wrap .notification {
+.dashboard-header .wrap-icons .div-contain {
   padding: 0 20px;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
+  cursor: pointer;
   border-left: 1px solid var(--Default-Dark-Ash, #232323);
   border-right: 1px solid var(--Default-Dark-Ash, #232323);
-  cursor: pointer;
+  width: -moz-fit-content;
+  width: fit-content;
 }
-.header .wrap .profile-contain {
+.dashboard-header .wrap-icons .div-contain.ai-w {
+  margin-right: 10px;
+}
+.dashboard-header .wrap-icons .profile-contain {
   display: flex;
   height: 30px;
   justify-content: center;
   align-items: center;
   position: relative;
 }
-.header .wrap .profile-contain .profile-wrap {
+.dashboard-header .wrap-icons .profile-contain .profile-wrap {
   display: flex;
   height: 100%;
   padding: 10px;
@@ -44,10 +48,10 @@
   gap: 10px;
   cursor: pointer;
 }
-.header .wrap .profile-contain .profile-wrap:hover {
+.dashboard-header .wrap-icons .profile-contain .profile-wrap:hover {
   background: var(--Brand-Transparent-Gold, rgba(221, 154, 56, 0.1));
 }
-.header .wrap .profile-contain .profile-wrap img.profile-img {
+.dashboard-header .wrap-icons .profile-contain .profile-wrap img.profile-img {
   width: 24px;
   height: 24px;
   -o-object-fit: cover;
@@ -55,7 +59,7 @@
   -o-object-position: center;
      object-position: center;
 }
-.header .wrap .profile-contain .profile-wrap p {
+.dashboard-header .wrap-icons .profile-contain .profile-wrap p {
   color: var(--Default-Light-grey, #e6e6e6);
   font-family: Commissioner;
   font-size: 13px;
@@ -63,7 +67,7 @@
   font-weight: 600;
   line-height: normal;
 }
-.header .wrap .profile-contain .profile-modal {
+.dashboard-header .wrap-icons .profile-contain .profile-modal {
   position: absolute;
   top: 35px;
   right: 0;
@@ -76,7 +80,7 @@
   background: var(--Default-Black, #1b1b1b);
   font-family: "Commissioner", sans-serif;
 }
-.header .wrap .profile-contain .profile-modal .left {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left {
   display: flex;
   width: 250px;
   height: 100%;
@@ -87,46 +91,46 @@
   border: 1px solid var(--Default-Dark-Ash, #232323);
   background: var(--Default-Dark-Ash, #232323);
 }
-.header .wrap .profile-contain .profile-modal .left h2 {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left h2 {
   font-family: "PT Mono", monospace;
   font-size: 14px;
   font-weight: 700;
   line-height: 100%;
 }
-.header .wrap .profile-contain .profile-modal .left p {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left p {
   font-family: "Commissioner", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 11px;
   line-height: 13px;
 }
-.header .wrap .profile-contain .profile-modal .left p span {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left p span {
   color: var(--Brand-Gold, #dd9a38);
 }
-.header .wrap .profile-contain .profile-modal .left .count {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left .count {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.header .wrap .profile-contain .profile-modal .left .count .txt {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left .count .txt {
   font-size: 11px;
   font-weight: 500;
   line-height: 13px;
   width: 100%;
 }
-.header .wrap .profile-contain .profile-modal .left .count .progress-container {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left .count .progress-container {
   position: relative;
   width: 40px;
   height: 40px;
 }
-.header .wrap .profile-contain .profile-modal .left .count .progress-arc {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left .count .progress-arc {
   stroke: #dd9a38;
   stroke-width: 4;
   fill: none;
   stroke-linecap: round;
 }
-.header .wrap .profile-contain .profile-modal .left .count .progress-text {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .left .count .progress-text {
   position: absolute;
   inset: 0;
   display: flex;
@@ -136,7 +140,7 @@
   font-size: 11px;
   font-weight: 600;
 }
-.header .wrap .profile-contain .profile-modal .right {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right {
   display: flex;
   width: 220px;
   padding: 40px 5px 5px 5px;
@@ -146,13 +150,13 @@
   gap: 5px;
   height: 100%;
 }
-.header .wrap .profile-contain .profile-modal .right .content {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .content {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.header .wrap .profile-contain .profile-modal .right .content img {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .content img {
   width: 40px;
   height: 40px;
   -o-object-fit: cover;
@@ -161,23 +165,23 @@
      object-position: center;
   margin-bottom: 15px;
 }
-.header .wrap .profile-contain .profile-modal .right .content h2 {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .content h2 {
   font-weight: 600;
   font-size: 14px;
   line-height: 17px;
   margin-bottom: 5px;
   text-transform: capitalize;
 }
-.header .wrap .profile-contain .profile-modal .right .content p {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .content p {
   font-weight: 500;
   font-size: 11px;
   line-height: 13px;
   text-transform: lowercase;
 }
-.header .wrap .profile-contain .profile-modal .right .actions {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions {
   width: 100%;
 }
-.header .wrap .profile-contain .profile-modal .right .actions a.action {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions a.action {
   display: flex;
   height: 32px;
   padding: 5px 15px;
@@ -186,25 +190,25 @@
   flex-shrink: 0;
   align-self: stretch;
 }
-.header .wrap .profile-contain .profile-modal .right .actions a.action:hover {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions a.action:hover {
   background: var(--Brand-Transparent-Gold, rgba(221, 154, 56, 0.1));
 }
-.header .wrap .profile-contain .profile-modal .right .actions a.action .wrap {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions a.action .wrap {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.header .wrap .profile-contain .profile-modal .right .actions a.action .wrap p {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions a.action .wrap p {
   font-weight: 500;
   font-size: 11px;
   line-height: 100%;
 }
-.header .wrap .profile-contain .profile-modal .right .actions .logout-container {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions .logout-container {
   border-top: 1px solid var(--Default-Dark-Ash, #232323);
   padding-top: 5px;
   margin-top: 5px;
 }
-.header .wrap .profile-contain .profile-modal .right .actions .logout-container .logout-action {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions .logout-container .logout-action {
   width: 100%;
   display: flex;
   height: 32px;
@@ -213,10 +217,10 @@
   align-items: center;
   cursor: pointer;
 }
-.header .wrap .profile-contain .profile-modal .right .actions .logout-container .logout-action:hover {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions .logout-container .logout-action:hover {
   background: var(--Brand-Transparent-Gold, rgba(221, 154, 56, 0.1));
 }
-.header .wrap .profile-contain .profile-modal .right .actions .logout-container .logout-action p {
+.dashboard-header .wrap-icons .profile-contain .profile-modal .right .actions .logout-container .logout-action p {
   color: var(--System-Red, #fe5858);
   font-size: 11px;
   font-weight: 500;

@@ -6,9 +6,10 @@ import "@/styles/DeployProject.css";
 type Props = {
   expandRightPanel: boolean;
   setShowYamDialog: (Callback: boolean) => void;
+  setShowAiModal: (Callback: boolean) => void;
 };
 
-const InstallWordpress = ({ expandRightPanel }: Props) => {
+const InstallWordpress = ({ expandRightPanel, setShowAiModal }: Props) => {
   return (
     <div
       className={`right-panel right-panel-yams ${
@@ -17,7 +18,7 @@ const InstallWordpress = ({ expandRightPanel }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader />
+        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         <div className="section-deploy">
           <div className="back-btn">

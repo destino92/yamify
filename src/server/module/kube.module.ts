@@ -27,12 +27,12 @@ export const kube = {
         metadata: {
           name: `${name}-ingress`,
           annotations: {
-            'kubernetes.io/ingress.class': 'nginx',
+            // 'kubernetes.io/ingress.class': 'nginx',
             'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
             'nginx.ingress.kubernetes.io/ssl-passthrough': 'true',
             'nginx.ingress.kubernetes.io/ssl-redirect': 'true',
             'external-dns.alpha.kubernetes.io/hostname': `${name}.aiscaler.ai`,
-            'cert-manager.io/cluster-issuer': 'letsencrypt-prod',
+            'cert-manager.io/cluster-issuer': 'letsencrypt-staging',
           },
         },
         spec: {
