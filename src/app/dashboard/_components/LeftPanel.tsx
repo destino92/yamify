@@ -87,15 +87,6 @@ const LeftPanel = ({
             <p>Dashboard</p>
           </Link>
 
-          <Link
-            href="https://chat.yamify.co"
-            target="_blank"
-            className="link"
-          >
-            <Image src="/svgs/chat-bot.svg" alt="" width={15} height={15} />
-            <p>Yamify bot</p>
-          </Link>
-
           <div className="workspace-container">
             <div className="workspace-link">
               <div className="wrap">
