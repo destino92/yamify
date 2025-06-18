@@ -67,8 +67,8 @@ const CreateWorkspaceDialog = ({ setShowYamDialog, loadingTxts }: Props) => {
 
   return (
     <div className="create-yam-dialog">
-      <div className="background-opacity"></div>
-      <div className="dialog-contain">
+      <div className="background-opacity "></div>
+      <div className="dialog-contain  ">
         <div className="close-btn" onClick={() => setShowYamDialog(false)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -87,16 +87,16 @@ const CreateWorkspaceDialog = ({ setShowYamDialog, loadingTxts }: Props) => {
           </svg>
         </div>
 
-        <div className="yam-dialog-container">
-          <form onSubmit={handleCreateWorkspace} className="workspace-dialog">
-            {!successBool ? (
-              <>
+        <div className="yam-dialog-container  justify-center items-center ">
+          <form onSubmit={handleCreateWorkspace} className="workspace-dialog  ">
+            {!successBool ? ( 
+              <div className="flex flex-col  gap-5 w-full h-full items-center translate-x-[75%]">
                 <div className="head">
                   <h1>What would you like to call your workspace?</h1>
                 </div>
                 <div className="label-txt">Names must be in lowercase.</div>
                 <div className="label workspace">
-                  <div className="left">
+                  <div className="">
                     <label htmlFor="">Workspace&apos;s name</label>
                   </div>
                   <div className="right">
@@ -157,7 +157,7 @@ const CreateWorkspaceDialog = ({ setShowYamDialog, loadingTxts }: Props) => {
                     <span className="hover-text">Launch my workspace</span>
                   </div>
                 </button>{" "}
-              </>
+              </div>
             ) : (
               <CreateAnimation
                 successBool={successBool}
@@ -168,7 +168,7 @@ const CreateWorkspaceDialog = ({ setShowYamDialog, loadingTxts }: Props) => {
             )}
           </form>
 
-          <div className="sample-container"></div>
+       
         </div>
       </div>
     </div>
