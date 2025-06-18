@@ -9,13 +9,14 @@
   flex-direction: column;
   gap: 30px;
   padding: 100px 0;
-  margin-bottom: 100px;
+  margin-bottom: 250px;
 }
 .new-hero-section section .content-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 30px;
+  margin-bottom: 90px;
 }
 .new-hero-section section .content-container h2 {
   text-align: center;
@@ -31,7 +32,7 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 17px;
-  max-width: 498px;
+  max-width: 680px;
   color: var(--Default-Light-grey, #e6e6e6);
 }
 .new-hero-section section .content-container .btns-wrap {
