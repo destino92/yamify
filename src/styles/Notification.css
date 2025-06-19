@@ -5,9 +5,6 @@
   align-items: center;
   gap: 6px;
   background: #111;
-}
-
-.notification-container.info {
   border: 1px solid #202020;
 }
 
@@ -19,7 +16,7 @@
   border: 1px solid rgba(226, 45, 27, 0.20);
 }
 
-.notification-icon {
+.notification-icon-containter {
   display: flex;
   width: 70px;
   height: 70px;
@@ -28,27 +25,33 @@
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  background: #202020;
 }
 
-.notification-icon.info {
-  width: 24px;
-  height: 24px;
+.notification-icon-containter {
+  display: flex;
+  width: 70px;
+  height: 70px;
+  padding: 5px 6px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   flex-shrink: 0;
   background: #202020;
 }
 
-.notification-icon.success {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
+.notification-icon-containter.success {
+  background: rgba(89, 191, 98, 0.20);
+}
+
+.notification-icon-containter.error {
   background: rgba(226, 45, 27, 0.20);
 }
 
-.notification-icon.error {
+.notification-icon {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  background: rgba(226, 45, 27, 0.20);
 }
 
 .notification-content {
@@ -76,7 +79,7 @@
   flex: 1 0 0;
 }
 
-.notification-title h1 .success {
+.notification-title-text {
   color: var(--Default-Light-grey, #E6E6E6);
   text-align: right;
 
@@ -88,11 +91,11 @@
   line-height: normal;
 }
 
-.notification-title .success {
+.notification-title-text .success {
   color: var(--System-Green, #59BF62);
 }
 
-.notification-title .error {
+.notification-title-text .error {
   color: var(--System-Red, #E22D1B);
 }
 
@@ -105,7 +108,7 @@
   gap: 10px;
 }
 
-.notification-close .icon {
+.notification-close > .icon {
   width: 15px;
   height: 15px;
   flex-shrink: 0;
@@ -128,7 +131,7 @@
   flex: 1 0 0;
 }
 
-.notification-message p {
+.notification-message > p {
   flex: 1 0 0;
   color: var(--Default-Grey, #B8B8B8);
   /* Commissioner for normal text/11 Com Medium */
