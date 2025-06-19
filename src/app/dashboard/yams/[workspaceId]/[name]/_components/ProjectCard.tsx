@@ -8,8 +8,7 @@ import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
 import { removeProjectAction } from "@/app/dashboard/_actions";
 import "@/styles/ProjectCardMenu.css";
 import { toast } from 'sonner';
-import SuccessToast from "@/components/Notification/SuccessToast";
-import ErrorToast from "@/components/Notification/ErrorToast";
+import Notification from "@/components/Notification/Notification";
 
 type ProjectCardProps = {
   project: Project;
@@ -41,17 +40,17 @@ const ProjectCard = ({ project, onProjectDeleted, lightMode = false }: ProjectCa
       const result = await removeProjectAction({ id: project.id });
       
       if (result.success) {
-        toast(<SuccessToast title="Success !!!" description="Project deleted successfully" />)
+        toast(<Notification title="Success !!!" description="Project deleted successfully" variant="success" />)
        
         if (onProjectDeleted) {
           onProjectDeleted();
         }
       } else {
-        toast(<ErrorToast title="Error !!!" description={result.error || "Failed to delete project"} />)
+        toast(<Notification title="Error !!!" description={result.error || "Failed to delete project"} variant="error" />)
       }
     } catch (err) {
       console.error("Error deleting project:", err);
-       toast(<ErrorToast title="Error !!!" description={result.error || "An unexpected error occurred"} />)
+       toast(<Notification title="Error !!!" description={result.error || "An unexpected error occurred"} variant="error" />)
     }
   };
   

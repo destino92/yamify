@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import CreateAnimation from "@/components/Home/CreateAnimation";
 import { completeOnboarding } from "./_actions";
 import { useUser } from "@clerk/nextjs";
-import ErrorToast from "@/components/Notification/ErrorToast";
+import Notification from "@/components/Notification/Notification";
 
 export default function OnboardingWorkpace() {
   const [createYam, setCreateYam] = useState(false);
@@ -64,7 +64,7 @@ export default function OnboardingWorkpace() {
         const data = await res.json();
         if (data.error) {
           console.error("Error creating workspace:", data.error);
-          toast(<ErrorToast title="Error !!!" description={data.error} />)
+          toast(<Notification title="Error !!!" description={data.error} variant="error" />)
           setSuccessBool(false);
           return;
         }
@@ -73,7 +73,7 @@ export default function OnboardingWorkpace() {
       // Check for error in direct object response
       if ("error" in res && res.error) {
         console.error("Error creating workspace:", res.error);
-        toast(<ErrorToast title="Error !!!" description={res.error} />)
+        toast(<Notification title="Error !!!" description={res.error} variant="error" />)
         setSuccessBool(false);
         return;
       }
@@ -85,11 +85,11 @@ export default function OnboardingWorkpace() {
         return;
       }
       // Fallback error handling
-      toast(<ErrorToast title="Error !!!" description="Unexpected response format" />)
+      toast(<Notification title="Error !!!" description="Unexpected response format" variant="error" />)
       setSuccessBool(false);
     } catch (error) {
       console.error("Error creating workspace:", error);
-      toast(<ErrorToast title="Error !!!" description="An unexpected error occurred" />)
+      toast(<Notification title="Error !!!" description="An unexpected error occurred" variant="error" />)
       setSuccessBool(false);
     }
   };

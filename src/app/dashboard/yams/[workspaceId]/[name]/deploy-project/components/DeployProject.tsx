@@ -13,8 +13,7 @@ import {
 } from "@/app/dashboard/_actions";
 import { useRouter } from "next/navigation";
 import CreateAnimation from "@/components/Home/CreateAnimation";
-import SuccessToast from "@/components/Notification/SuccessToast";
-import ErrorToast from "@/components/Notification/ErrorToast";
+import Notification from "@/components/Notification/Notification";
 
 type Props = {
   expandRightPanel: boolean;
@@ -47,7 +46,7 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
       } catch (err) {
         console.error(err);
         setError("Could not load yam. Please try again later.");
-        toast(<ErrorToast title="Error !!!" description={"Could not load yam. Please try again later."} />)
+        toast(<Notification title="Error !!!" description={"Could not load yam. Please try again later."} variant="error" />)
         setLoading(false);
       }
     }
@@ -74,7 +73,7 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
       });
 
       if (result.success) {
-        toast(<SuccessToast title="Success !!!" description="WordPress deployment created successfully!" />)
+        toast(<Notification title="Success !!!" description="WordPress deployment created successfully!" variant="success" />)
         setShowAnimation(false);
         setTimeout(() => {
           router.back();
@@ -83,12 +82,12 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
         setShowAnimation(false);
         console.error("WordPress deployment error:", result.error);
-        toast(<ErrorToast title="Error !!!" description={result.error} />)
+        toast(<Notification title="Error !!!" description={result.error} variant="error" />)
       }
     } catch (error) {
       setShowAnimation(false);
       console.error("Failed to deploy WordPress:", error);
-      toast(<ErrorToast title="Error !!!" description={"Failed to deploy WordPress. Please try again."} />)
+      toast(<Notification title="Error !!!" description={"Failed to deploy WordPress. Please try again."} variant="error" />)
     }
   };
 
@@ -106,7 +105,7 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
       });
 
       if (result.success) {
-        toast(<SuccessToast title="Success !!!" description="CodeServer deployment created successfully!" />)
+        toast(<Notification title="Success !!!" description="CodeServer deployment created successfully!" variant="success" />)
         setShowAnimation(false);
         setTimeout(() => {
           router.back();
@@ -115,12 +114,12 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
         setShowAnimation(false);
         console.error("CodeServer deployment error:", result.error);
-        toast(<ErrorToast title="Error !!!" description={result.error} />)
+        toast(<Notification title="Error !!!" description={result.error} variant="error" />)
       }
     } catch (error) {
       setShowAnimation(false);
       console.error("Failed to deploy CodeServer:", error);
-      toast(<ErrorToast title="Error !!!" description="Failed to deploy CodeServer. Please try again." />)
+      toast(<Notification title="Error !!!" description="Failed to deploy CodeServer. Please try again." variant="error" />)
     }
   };
 
@@ -138,7 +137,7 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
       });
 
       if (result.success) {
-        toast(<SuccessToast title="Success !!!" description="n8n deployment created successfully!" />)
+        toast(<Notification title="Success !!!" description="n8n deployment created successfully!" variant="success" />)
         setShowAnimation(false);
         setTimeout(() => {
           router.back();
@@ -147,12 +146,12 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
         setShowAnimation(false);
         console.error("n8n deployment error:", result.error);
-        toast(<ErrorToast title="Error !!!" description={result.error} />)
+        toast(<Notification title="Error !!!" description={result.error} variant="error" />)
       }
     } catch (error) {
       setShowAnimation(false);
       console.error("Failed to deploy n8n:", error);
-      toast(<ErrorToast title="Error !!!" description="Failed to deploy n8n. Please try again." />)
+      toast(<Notification title="Error !!!" description="Failed to deploy n8n. Please try again." variant="error" />)
     }
   };
 
