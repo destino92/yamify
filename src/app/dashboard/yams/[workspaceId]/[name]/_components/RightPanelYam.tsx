@@ -1,4 +1,4 @@
-import DashboardHeader from "@/app/dashboard/_components/DashboardHeader";
+
 import fetchYam from "@/libs/queries/fetch-yam";
 import "@/styles/RightPanelDashboard.css";
 import "@/styles/RightPanelDashboardYamPage.css";
@@ -15,7 +15,6 @@ import ProjectCard from "./ProjectCard";
 
 type Props = {
   expandRightPanel: boolean;
-  setShowAiModal: (Callback: boolean) => void;
 };
 
 // const yamData = [
@@ -46,7 +45,7 @@ type Props = {
 //   workspace: string;
 // }
 
-const RightPanelYam = ({ expandRightPanel, setShowAiModal }: Props) => {
+const RightPanelYam = ({ expandRightPanel }: Props) => {
   const [yam, setYam] = useState<SelectYam>();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -106,7 +105,6 @@ const RightPanelYam = ({ expandRightPanel, setShowAiModal }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         {!loading && (
           <div className="section-yam">

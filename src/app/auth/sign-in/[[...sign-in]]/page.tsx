@@ -47,7 +47,7 @@ export default function SignIn() {
     <div className="auth-section">
       <AuthHeader />
         <p className="back-to-login">
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Link href="/auth/sign-up" >
           Sign up
         </Link>
@@ -112,9 +112,10 @@ export default function SignIn() {
                   router.push('/dashboard');
                 }
                 
-              } catch (err: any) {
+              } catch (err: unknown) {
                 console.error('Error during sign in:', err);
-                const errorMessage = err.errors?.[0]?.message || 'Invalid email or password';
+                const clerkError = err as { errors?: Array<{ message: string }> };
+                const errorMessage = clerkError.errors?.[0]?.message || 'Invalid email or password';
                 toast.error(errorMessage);
               } finally {
                 setIsLoading(false);

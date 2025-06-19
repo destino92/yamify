@@ -1,6 +1,5 @@
 "use client";
 
-import DashboardHeader from "@/app/dashboard/_components/DashboardHeader";
 import fetchYams from "@/libs/queries/fetch-yams";
 import "@/styles/RightPanelDashboard.css";
 import "@/styles/RightPanelDashboardYam.css";
@@ -12,7 +11,6 @@ import { useEffect, useState } from "react";
 type Props = {
   expandRightPanel: boolean;
   setShowYamDialog: (Callback: boolean) => void;
-  setShowAiModal: (Callback: boolean) => void;
 };
 
 // const yamData = [
@@ -37,7 +35,6 @@ type Props = {
 const RightPanelYams = ({
   expandRightPanel,
   setShowYamDialog,
-  setShowAiModal,
 }: Props) => {
   const [yams, setYams] = useState<SelectYam[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +73,6 @@ const RightPanelYams = ({
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         <div className="section-yam">
           <nav>

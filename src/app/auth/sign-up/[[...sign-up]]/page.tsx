@@ -157,9 +157,10 @@ export default function SignUp() {
                 // Rediriger vers la page de vérification
                 router.push('/auth/verify-email');
                 
-              } catch (err: any) {
+              } catch (err: unknown) {
                 console.error('Error during sign up:', err);
-                const errorMessage = err.errors?.[0]?.message || 'An error occurred during sign up';
+                const clerkError = err as { errors?: Array<{ message: string }> };
+                const errorMessage = clerkError.errors?.[0]?.message || 'An error occurred during sign up';
                 toast.error(errorMessage);
               } finally {
                 setIsLoading(false);
