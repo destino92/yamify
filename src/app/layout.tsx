@@ -11,6 +11,7 @@ import DatadogRumInitializer from '@/components/DatadogRumInitializer';
 import CreateAnimation from "@/components/Home/CreateAnimation";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Toaster } from 'sonner'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,7 +68,7 @@ export default function RootLayout({
         >
           {/* 3. Placez le composant DatadogRumInitializer ici, à l'intérieur du <body> */}
           <DatadogRumInitializer />
-          
+          <Toaster />
           {/* Animation de transition entre les pages */}
           {isPageTransitioning ? (
             <div className="page-transition-overlay ">
