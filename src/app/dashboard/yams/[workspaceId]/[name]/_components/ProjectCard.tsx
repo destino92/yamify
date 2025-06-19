@@ -5,9 +5,11 @@ import { groups } from "@/utils/data";
 import { Project } from "@prisma/client";
 import { useState, useRef, useEffect } from "react";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
-import { useNotification } from "@/hooks/useNotification";
 import { removeProjectAction } from "@/app/dashboard/_actions";
 import "@/styles/ProjectCardMenu.css";
+import { toast } from 'sonner';
+import SuccessToast from "@/components/Notification/SuccessToast";
+import ErrorToast from "@/components/Notification/ErrorToast";
 
 type ProjectCardProps = {
   project: Project;
@@ -19,7 +21,6 @@ const ProjectCard = ({ project, onProjectDeleted, lightMode = false }: ProjectCa
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { success, error } = useNotification();
   
   // Close menu when clicking outside of it
   useEffect(() => {
@@ -40,16 +41,17 @@ const ProjectCard = ({ project, onProjectDeleted, lightMode = false }: ProjectCa
       const result = await removeProjectAction({ id: project.id });
       
       if (result.success) {
-        success("Project deleted successfully");
+        toast(<SuccessToast title="Success !!!" description="Project deleted successfully" />)
+       
         if (onProjectDeleted) {
           onProjectDeleted();
         }
       } else {
-        error(result.error || "Failed to delete project");
+        toast(<ErrorToast title="Error !!!" description={result.error || "Failed to delete project"} />)
       }
     } catch (err) {
       console.error("Error deleting project:", err);
-      error("An unexpected error occurred");
+       toast(<ErrorToast title="Error !!!" description={result.error || "An unexpected error occurred"} />)
     }
   };
   

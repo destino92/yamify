@@ -68,7 +68,7 @@ export default function RootLayout({
         >
           {/* 3. Placez le composant DatadogRumInitializer ici, à l'intérieur du <body> */}
           <DatadogRumInitializer />
-          <Toaster />
+          <Toaster position="top-center" />
           {/* Animation de transition entre les pages */}
           {isPageTransitioning ? (
             <div className="page-transition-overlay ">

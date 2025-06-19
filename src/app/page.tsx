@@ -3,8 +3,6 @@
 import Footer from "@/components/Home/Footer";
 import Header from "@/components/Home/Header";
 import JoinWaitlistModal from "@/components/Home/JoinWaitlistModal";
-// import { useNotification } from "@/hooks/useNotification";
-import { NotificationContainer } from "@/components/Notification";
 
 import "@/styles/Home.css";
 import { useRef, useState } from "react";
@@ -15,7 +13,6 @@ import ReadyToBuild from "@/components/Home/ReadyToBuild";
 
 export default function Home() {
   const [joinWaitlistModal, setJoinWaitlistModal] = useState(false);
-  // const { success, error, warning, info } = useNotification();
 
   const heroRef = useRef<HTMLDivElement | null>(null);
   const contactRef = useRef<HTMLDivElement | null>(null);
@@ -71,8 +68,6 @@ export default function Home() {
         heroRef={heroRef}
         // capabilityRef={capabilityRef}
       />
-
-      <NotificationContainer />
     </div>
   );
 }
