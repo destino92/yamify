@@ -86,6 +86,26 @@ header section nav .feature-link .wrap-link {
   gap: 10px;
   cursor: pointer;
 }
+header section nav .feature-link .resources-container {
+  display: flex;
+  flex-direction: column;
+  padding: 50px 30px 40px 30px;
+  align-items: flex-start;
+  width: 183px;
+  gap: 20px;
+  position: absolute;
+  top: 50px;
+  left: -10px;
+  border: 0.5px dashed var(--Default-Ash, #4c4c4c);
+  background: var(--Default-Black, #111);
+  box-shadow: 0px 4px 10px 0px var(--Default-Dark-Ash, #202020);
+}
+header section nav .feature-link .resources-container svg.line-hang {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 header section nav .nav-link {
   font-size: 12px;
   font-style: normal;

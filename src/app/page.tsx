@@ -12,13 +12,15 @@ import NewHeroSection from "@/components/Home/NewHeroSection";
 import NewCapacitySection from "@/components/Home/NewCapacitySection";
 import SpeakStackSection from "@/components/Home/SpeakStackSection";
 import ReadyToBuild from "@/components/Home/ReadyToBuild";
+import AnimatedAiLogo from "@/components/Animations/AnimatedAiLogo";
+import AiChatModal from "./dashboard/_components/AiChatModal";
 
 export default function Home() {
   const [joinWaitlistModal, setJoinWaitlistModal] = useState(false);
+  const [showAiModal, setShowAiModal] = useState(false);
   // const { success, error, warning, info } = useNotification();
 
   const heroRef = useRef<HTMLDivElement | null>(null);
-  const contactRef = useRef<HTMLDivElement | null>(null);
   const featuresRef = useRef<HTMLDivElement | null>(null);
 
   // const handleClick = () => {
@@ -49,6 +51,12 @@ export default function Home() {
       <SpeakStackSection />
       <ReadyToBuild setJoinWaitlistModal={setJoinWaitlistModal} />
 
+      {!showAiModal && (
+        <div className="ai_logo_fixed" onClick={() => setShowAiModal(true)}>
+          <AnimatedAiLogo />
+        </div>
+      )}
+
       {/* <HeroSection heroRef={heroRef} lightMode={lightMode} /> */}
 
       {/* <button onClick={handleClick}>Afficher une notification</button> */}
@@ -65,12 +73,9 @@ export default function Home() {
           lightMode={lightMode}
         />
       </div> */}
-      <Footer
-        featuresRef={featuresRef}
-        contactRef={contactRef}
-        heroRef={heroRef}
-        // capabilityRef={capabilityRef}
-      />
+      <Footer />
+
+      {showAiModal && <AiChatModal setShowAiModal={setShowAiModal} />}
 
       <NotificationContainer />
     </div>

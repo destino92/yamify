@@ -18,19 +18,19 @@
 .slide-stack-container::before, .slide-stack-container::after {
   content: "";
   position: absolute;
-  top: 0;
-  width: 80px;
-  height: 100%;
+  bottom: 0;
+  width: 60px;
+  height: 44px;
   z-index: 20;
   pointer-events: none;
 }
 .slide-stack-container::before {
   left: 0;
-  background: linear-gradient(to right, #111, rgba(17, 17, 17, 0));
+  background: linear-gradient(to right, rgba(26, 24, 18, 0.9490196078), rgba(32, 29, 22, 0));
 }
 .slide-stack-container::after {
   right: 0;
-  background: linear-gradient(to left, #111, rgba(17, 17, 17, 0));
+  background: linear-gradient(to left, rgba(26, 24, 18, 0.9490196078), rgba(32, 29, 22, 0));
 }
 .slide-stack-container .slide-stack {
   align-items: center;

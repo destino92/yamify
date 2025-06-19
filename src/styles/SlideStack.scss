@@ -20,21 +20,21 @@
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    width: 80px;
-    height: 100%;
+    bottom: 0;
+    width: 60px;
+    height: 44px;
     z-index: 20;
     pointer-events: none;
   }
 
   &::before {
     left: 0;
-    background: linear-gradient(to right, #111, rgba(17, 17, 17, 0));
+    background: linear-gradient(to right, #1a1812f2, rgba(32, 29, 22, 0));
   }
 
   &::after {
     right: 0;
-    background: linear-gradient(to left, #111, rgba(17, 17, 17, 0));
+    background: linear-gradient(to left, #1a1812f2, rgba(32, 29, 22, 0));
   }
 
   .slide-stack {

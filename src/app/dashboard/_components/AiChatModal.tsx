@@ -11,6 +11,7 @@ import { useUser } from "@clerk/nextjs";
 import hljs from "highlight.js";
 import "highlight.js/styles/github-dark.css"; // Importer un thème de coloration
 import ReactMarkdown from "react-markdown";
+import AnimatedAiLogo from "@/components/Animations/AnimatedAiLogo";
 
 // Fonction pour appliquer la coloration syntaxique avec highlight.js
 const applySyntaxHighlighting = (code: string, language: string) => {
@@ -444,7 +445,8 @@ const AiChatModal = ({ setShowAiModal }: Props) => {
           {messages.length === 0 && (
             <>
               <div className="intro-msg">
-                <Image src="/svgs/yamifyai.svg" alt="" width={32} height={32} />
+                <AnimatedAiLogo width={32} height={32} />
+
                 <h2>Hi {user?.firstName}!</h2>
                 <p>How may I help you?</p>
               </div>
