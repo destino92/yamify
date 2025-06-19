@@ -6,11 +6,11 @@ import { createWorkspaceAction } from "../_actions";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  setShowYamDialog: (Callback: boolean) => void;
+  setShowWorkspaceDialog: (Callback: boolean) => void;
   loadingTxts: string[];
 };
 
-const CreateWorkspaceDialog = ({ setShowYamDialog, loadingTxts }: Props) => {
+const CreateWorkspaceDialog = ({ setShowWorkspaceDialog, loadingTxts }: Props) => {
   const [successBool, setSuccessBool] = useState(false);
   const [createYam, setCreateYam] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
@@ -69,7 +69,7 @@ const CreateWorkspaceDialog = ({ setShowYamDialog, loadingTxts }: Props) => {
     <div className="create-yam-dialog">
       <div className="background-opacity "></div>
       <div className="dialog-contain  ">
-        <div className="close-btn" onClick={() => setShowYamDialog(false)}>
+        <div className="close-btn" onClick={() => setShowWorkspaceDialog(false)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

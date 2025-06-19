@@ -1,4 +1,3 @@
-import DashboardHeader from "@/app/dashboard/_components/DashboardHeader";
 import "@/styles/RightPanelDashboard.css";
 import "@/styles/DeployProject.css";
 import Image from "next/image";
@@ -8,11 +7,9 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   expandRightPanel: boolean;
-  setShowYamDialog: (Callback: boolean) => void;
-  setShowAiModal: (Callback: boolean) => void;
 };
 
-const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
+const DeployProject = ({ expandRightPanel }: Props) => {
   const router = useRouter();
 
   return (
@@ -23,7 +20,6 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         <div className="section-deploy">
           <div onClick={() => router.back()} className="back-btn">

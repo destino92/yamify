@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AuthHeader from "../_components/AuthHeader";
 import "@/styles/AuthPage.css";
 import "./ResetPassword.css";
@@ -14,7 +14,7 @@ import CreateAnimation from "@/components/Home/CreateAnimation";
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [sending, setSending] = useState(false);
   const router = useRouter();
@@ -42,11 +42,12 @@ export default function ResetPasswordPage() {
       });
       
       // Afficher un message de succès
-      setError("");
+      setError(" ");
       toast.success("Reset link has been resent to your email.");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error resending reset link:", err);
-      const errorMessage = err.errors?.[0]?.message || "Failed to resend email. Please try again.";
+      const clerkError = err as { errors?: Array<{ message: string }> };
+      const errorMessage = clerkError.errors?.[0]?.message || "Failed to resend email. Please try again.";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -69,10 +70,12 @@ export default function ResetPasswordPage() {
       });
       
       setSuccess(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error requesting password reset:", err);
-      const errorMessage = err.errors?.[0]?.message || "An error occurred. Please try again.";
+      const clerkError = err as { errors?: Array<{ message: string }> };
+      const errorMessage = clerkError.errors?.[0]?.message || "An error occurred. Please try again.";
       toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
       setSending(false);
@@ -157,7 +160,7 @@ export default function ResetPasswordPage() {
               </div>
               
               <div className="email-footer">
-                <p>Didn't receive the email? <a href="#" onClick={handleResend}>Click to resend</a></p>
+                <p>Didn&apos;t receive the email? <a href="#" onClick={handleResend}>Click to resend</a></p>
                 <button 
                   className="back-to-login"
                   onClick={() => router.push('/sign-in')}
@@ -190,7 +193,7 @@ export default function ResetPasswordPage() {
           </div>
           
           <h1>Reset your password</h1>
-          <p className="subtitle w-full text-[11px] ">Enter your email address and we'll send you a link to reset your password.</p>
+          <p className="subtitle w-full text-[11px] ">Enter your email address and we&apos;ll send you a link to reset your password.</p>
           
           <form onSubmit={handleSubmit}>
             <div className="label">
