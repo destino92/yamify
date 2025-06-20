@@ -3,6 +3,7 @@
 Yamify is an AI-powered personal cloud platform designed specifically for African developers. It provides reliable, affordable, and scalable cloud infrastructure with tools and support tailored to the unique needs of developers across Africa.
 
 
+
 ![Yamify Logo](/public/svgs/yamify_logo_lg.svg)
 
 
@@ -80,4 +81,4 @@ For questions or feedback, please reach out to us at [contact@yamify.com](mailto
 
 ---
 
-Designed for Africa, Built for Developers. We get you. You're not alone.
+Designed for Africa, Built for Developers. We get you. You're not alone..
