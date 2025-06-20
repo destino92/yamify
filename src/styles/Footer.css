@@ -143,10 +143,33 @@ footer section .container-footer .right img.pin {
 footer section .container-footer .right img.pin.top-right {
   right: -10.5px;
 }
-footer section .container-footer .right .socials {
+footer section .container-footer .right .social-container h4 {
+  color: var(--Brand-Gold, #dd9a38);
+  text-align: center;
+  font-family: "Commissioner", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 100%;
+  margin-bottom: 10px;
+}
+footer section .container-footer .right .social-container .socials {
   display: flex;
   align-items: center;
   gap: 10px;
+  pointer-events: all;
+}
+footer section .container-footer .right .social-container .socials a {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid var(--Default-Dark-Ash, #202020);
+}
+footer section .container-footer .right .social-container .socials a:hover {
+  background: var(--Brand-Transparent-Gold, rgba(221, 154, 56, 0.1));
 }
 footer section .container-footer .right .contact-info {
   display: flex;

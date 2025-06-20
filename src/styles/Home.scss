@@ -14,6 +14,20 @@
   }
   // overflow-x: hidden;
 
+  .ai_logo_fixed {
+    position: fixed;
+    bottom: 10%;
+    right: 10%;
+    z-index: 99999999999999999999;
+    display: flex;
+    padding: 12px;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--Default-Dark-Ash, #202020);
+    background: var(--Default-Black, #111);
+    cursor: pointer;
+  }
+
   .section-containers {
     max-width: 1312px;
     width: 100%;

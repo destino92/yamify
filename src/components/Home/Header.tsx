@@ -21,6 +21,7 @@ const Header = ({ heroRef, featuresRef }: Props) => {
   const [scrolled, setScrolled] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -111,6 +112,7 @@ const Header = ({ heroRef, featuresRef }: Props) => {
             <AnimatePresence>
               {isHovered && (
                 <motion.div
+                  key="features"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -121,9 +123,63 @@ const Header = ({ heroRef, featuresRef }: Props) => {
               )}
             </AnimatePresence>
           </div>
-          <div className="nav-link">
-            <span>Contact</span>
-            <span className="hover-text">Contact</span>
+          <div
+            className="feature-link"
+            onMouseEnter={() => setIsHovered2(true)}
+            onMouseLeave={() => setIsHovered2(false)}
+          >
+            <div className="wrap-link">
+              <div className="nav-link" onClick={handleScrollToFeatures}>
+                <span>Resources</span>
+                <span className="hover-text">Resources</span>
+              </div>
+              <Image src="/svgs/caret_down.svg" alt="" width={15} height={15} />
+            </div>
+
+            <AnimatePresence>
+              {isHovered2 && (
+                <motion.div
+                  key="resources"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <div className="resources-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="6"
+                      height="46"
+                      viewBox="0 0 6 46"
+                      fill="none"
+                      className="line-hang"
+                    >
+                      <path
+                        opacity="0.5"
+                        d="M3 0.113249L0.113249 3L3 5.88675L5.88675 3L3 0.113249ZM3 40.3333C1.52724 40.3333 0.333332 41.5272 0.333332 43C0.333331 44.4728 1.52724 45.6667 3 45.6667C4.47276 45.6667 5.66666 44.4728 5.66666 43C5.66667 41.5272 4.47276 40.3333 3 40.3333ZM3 3L2.5 3L2.5 5L3 5L3.5 5L3.5 3L3 3ZM3 9L2.5 9L2.5 13L3 13L3.5 13L3.5 9L3 9ZM3 17L2.5 17L2.5 21L3 21L3.5 21L3.5 17L3 17ZM3 25L2.5 25L2.5 29L3 29L3.5 29L3.5 25L3 25ZM3 33L2.5 33L2.5 37L3 37L3.5 37L3.5 33L3 33ZM3 41L2.5 41L2.5 43L3 43L3.5 43L3.5 41L3 41Z"
+                        fill="#DD9A38"
+                      />
+                    </svg>
+                    <Link href="#" className="nav-link">
+                      <span>Blog</span>
+                      <span className="hover-text">Blog</span>
+                    </Link>
+                    <Link href="#" className="nav-link">
+                      <span>Community</span>
+                      <span className="hover-text">Community</span>
+                    </Link>
+                    <Link href="#" className="nav-link">
+                      <span>Docs</span>
+                      <span className="hover-text">Docs</span>
+                    </Link>
+                    <Link href="#" className="nav-link">
+                      <span>Technical Support</span>
+                      <span className="hover-text">Technical Support</span>
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </nav>
 

@@ -4,6 +4,7 @@ import Button from "../Button/Button";
 import routes from "@/libs/routes";
 import Image from "next/image";
 import { RefObject } from "react";
+import SlideStacks from "./SlideStacks";
 
 type Props = {
   setJoinWaitlistModal: (value: boolean) => void;
@@ -22,14 +23,14 @@ const NewHeroSection = ({ setJoinWaitlistModal, heroRef }: Props) => {
         <div className="content-container">
           <h2>Where Your Data Lives and Stays</h2>
           <p>
-            Yamify is the AI cloud infrastructure built for how Africa builds -
-            control without compromise. From local billing to one-click
-            deployment and AI-powered automation, it’s everything you need to
-            build, launch, and scale, right where you are.
+            Yamify is a local cloud platform made for developers who want speed,
+            reliability, and control. Your apps run on secure, local
+            infrastructure—so your data stays nearby, your costs stay low, and
+            your setup is always in your hands.
           </p>
           <div className="btns-wrap">
             <Button
-              text="Join Waitlist"
+              text="Join Waitlist Now"
               href={routes.auth.signup}
               yellow={true}
               linkBtn={false}
@@ -39,6 +40,7 @@ const NewHeroSection = ({ setJoinWaitlistModal, heroRef }: Props) => {
         </div>
 
         <div className="drop-img">
+          <SlideStacks />
           <Image
             className="backdrop"
             src="/svgs/yam_dashboard.svg"
