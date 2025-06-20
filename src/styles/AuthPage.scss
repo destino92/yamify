@@ -9,11 +9,17 @@
 
     .auth-header {
       width: 100%;
+      max-width: 1312px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       height: 60px;
       font-family: "Commissioner", sans-serif;
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1b1b1b;
 
       .logo {
         display: flex;
@@ -52,7 +58,7 @@
 
     .container {
       margin: 0 auto;
-      margin-top: 122px;
+      margin-top: 162px;
       width: 400px;
 
       .back-icon {
@@ -81,7 +87,7 @@
         margin-bottom: 24px;
         font-family: "Commissioner", sans-serif;
 
-        .btn-auth {
+        .btn {
           display: flex;
           height: 40px;
           padding: 15px;
@@ -159,6 +165,40 @@
         .label {
           width: 100%;
           display: flex;
+
+          &.password-checker-container {
+            .left {
+              border-right: none;
+            }
+
+            .right {
+              display: flex;
+              align-items: flex-start;
+              flex-wrap: wrap;
+              flex-direction: row;
+              justify-content: flex-start;
+
+              .wrap {
+                display: flex;
+                align-items: center;
+                width: fit-content;
+                gap: 8px;
+
+                svg {
+                  width: 16px;
+                  height: 16px;
+                }
+
+                p {
+                  color: var(--Default-Ash, #4c4c4c);
+                  font-family: "Commissioner", sans-serif;
+                  font-size: 11px;
+                  font-weight: 500;
+                  line-height: 100%;
+                }
+              }
+            }
+          }
 
           &:last-child {
             margin-bottom: 50px;

@@ -1,0 +1,157 @@
+/* Styles spécifiques pour la page de vérification par OTP */
+
+/* Ces styles sont complémentaires à AuthPage.css */
+
+/* Container pour les champs OTP */
+.otp-box {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0 30px;
+    justify-content: flex-start;
+  }
+  
+  /* Groupe des champs retry */
+  .retry-box {
+    margin: -10px 0 20px;
+    text-align: center;
+  }
+  
+  .retry-box p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Lien texte */
+  .text-link {
+    color: #BDFFFB;
+    cursor: pointer;
+    transition: text-decoration 0.2s;
+  }
+  
+  .text-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Bouton actif */
+  .submit-button.active-btn {
+    background-color: #E6A835 !important;
+    color: black;
+  }
+  
+  .submit-button.active-btn:hover {
+    background-color: #d99b28 !important;
+  }
+  
+  /* Style des champs de saisie OTP */
+  .otp-input {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+    color: white;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+  
+  /* Style quand un champ OTP est en focus */
+  .otp-input:focus {
+    outline: none;
+    border-color: #BDFFFB;
+    box-shadow: 0 0 0 2px rgba(189, 255, 251, 0.2);
+  }
+  
+  /* Style quand un champ OTP est rempli */
+  .otp-input:not(:placeholder-shown) {
+    border-color: #5CB85C;
+    background-color: rgba(92, 184, 92, 0.1);
+  }
+  
+  /* Groupe des boutons */
+  .otp-retry {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .otp-retry p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .retry-link {
+    color: #BDFFFB;
+    cursor: pointer;
+    display: inline;
+    font-weight: 500;
+  }
+  
+  .retry-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Bouton Verify */
+  .verify-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: #4a4a4a;
+    color: white;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+  }
+  
+  .verify-button.active {
+    background-color: #E6A835;
+    color: black;
+  }
+  
+  .verify-button:hover.active {
+    background-color: #d99b28;
+  }
+  
+  /* Conteneur de message d'erreur */
+  .error {
+    color: #ff6b6b;
+    font-size: 14px;
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+  
+  /* Conteneur pour le bouton de test en mode développement */
+  .test-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .test-button {
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+  
+  .test-button:hover {
+    background-color: #5e5e5e;
+  }
+  
+  /* Animation pour focus sur les champs OTP */
+  .otp-input:focus {
+    transform: scale(1.05);
+  }
+  
+  /* État désactivé pour les boutons */
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }

@@ -3,8 +3,6 @@
 import Footer from "@/components/Home/Footer";
 import Header from "@/components/Home/Header";
 import JoinWaitlistModal from "@/components/Home/JoinWaitlistModal";
-// import { useNotification } from "@/hooks/useNotification";
-import { NotificationContainer } from "@/components/Notification";
 
 import "@/styles/Home.css";
 import { useRef, useState } from "react";
@@ -17,8 +15,8 @@ import AiChatModal from "./dashboard/_components/AiChatModal";
 
 export default function Home() {
   const [joinWaitlistModal, setJoinWaitlistModal] = useState(false);
+
   const [showAiModal, setShowAiModal] = useState(false);
-  // const { success, error, warning, info } = useNotification();
 
   const heroRef = useRef<HTMLDivElement | null>(null);
   const featuresRef = useRef<HTMLDivElement | null>(null);
@@ -73,11 +71,11 @@ export default function Home() {
           lightMode={lightMode}
         />
       </div> */}
+
       <Footer />
 
       {showAiModal && <AiChatModal setShowAiModal={setShowAiModal} />}
 
-      <NotificationContainer />
     </div>
   );
 }
