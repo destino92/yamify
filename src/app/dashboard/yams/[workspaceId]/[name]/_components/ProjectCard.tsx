@@ -40,17 +40,17 @@ const ProjectCard = ({ project, onProjectDeleted, lightMode = false }: ProjectCa
       const result = await removeProjectAction({ id: project.id });
       
       if (result.success) {
-        toast(<Notification title="Success !!!" description="Project deleted successfully" variant="success" />)
+        toast.custom(() => <Notification title="Success !!!" description="Project deleted successfully" variant="success" />)
        
         if (onProjectDeleted) {
           onProjectDeleted();
         }
       } else {
-        toast(<Notification title="Error !!!" description={result.error || "Failed to delete project"} variant="error" />)
+        toast.custom(() => <Notification title="Error !!!" description={result.error || "Failed to delete project"} variant="error" />)
       }
     } catch (err) {
       console.error("Error deleting project:", err);
-       toast(<Notification title="Error !!!" description={result.error || "An unexpected error occurred"} variant="error" />)
+       toast.custom(() => <Notification title="Error !!!" description={result.error || "An unexpected error occurred"} variant="error" />)
     }
   };
   

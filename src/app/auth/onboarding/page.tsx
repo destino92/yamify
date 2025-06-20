@@ -9,6 +9,7 @@ import CreateAnimation from "@/components/Home/CreateAnimation";
 import { completeOnboarding } from "./_actions";
 import { useUser } from "@clerk/nextjs";
 import Notification from "@/components/Notification/Notification";
+import { toast } from "sonner";
 
 export default function OnboardingWorkpace() {
   const [createYam, setCreateYam] = useState(false);
@@ -64,7 +65,7 @@ export default function OnboardingWorkpace() {
         const data = await res.json();
         if (data.error) {
           console.error("Error creating workspace:", data.error);
-          toast(<Notification title="Error !!!" description={data.error} variant="error" />)
+          toast.custom(() => <Notification title="Error !!!" description={data.error} variant="error" />)
           setSuccessBool(false);
           return;
         }
@@ -73,7 +74,7 @@ export default function OnboardingWorkpace() {
       // Check for error in direct object response
       if ("error" in res && res.error) {
         console.error("Error creating workspace:", res.error);
-        toast(<Notification title="Error !!!" description={res.error} variant="error" />)
+        toast.custom(() => <Notification title="Error !!!" description={res.error} variant="error" />)
         setSuccessBool(false);
         return;
       }
@@ -85,11 +86,11 @@ export default function OnboardingWorkpace() {
         return;
       }
       // Fallback error handling
-      toast(<Notification title="Error !!!" description="Unexpected response format" variant="error" />)
+      toast.custom(() => <Notification title="Error !!!" description="Unexpected response format" variant="error" />)
       setSuccessBool(false);
     } catch (error) {
       console.error("Error creating workspace:", error);
-      toast(<Notification title="Error !!!" description="An unexpected error occurred" variant="error" />)
+      toast.custom(() => <Notification title="Error !!!" description="An unexpected error occurred" variant="error" />)
       setSuccessBool(false);
     }
   };
