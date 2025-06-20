@@ -58,3 +58,5 @@ src/server/config/gsa-key.json
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+.idea
