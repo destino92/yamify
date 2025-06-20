@@ -160,19 +160,19 @@ const Header = ({ heroRef, featuresRef }: Props) => {
                         fill="#DD9A38"
                       />
                     </svg>
-                    <Link href="/blog" className="nav-link">
+                    <Link href="#" className="nav-link">
                       <span>Blog</span>
                       <span className="hover-text">Blog</span>
                     </Link>
-                    <Link href="/community" className="nav-link">
+                    <Link href="#" className="nav-link">
                       <span>Community</span>
                       <span className="hover-text">Community</span>
                     </Link>
-                    <Link href="/docs" className="nav-link">
+                    <Link href="#" className="nav-link">
                       <span>Docs</span>
                       <span className="hover-text">Docs</span>
                     </Link>
-                    <Link href="/community" className="nav-link">
+                    <Link href="#" className="nav-link">
                       <span>Technical Support</span>
                       <span className="hover-text">Technical Support</span>
                     </Link>
