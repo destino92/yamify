@@ -1,27 +1,47 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import AuthHeader from "../../_components/AuthHeader";
 import "@/styles/AuthPage.css";
 import Image from "next/image";
-// import { countries } from "@/utils/data";
-
 import { OAuthStrategy } from "@clerk/types";
-import { useSignUp } from "@clerk/nextjs";
+import { useSignUp, useAuth } from "@clerk/nextjs";
+import { toast } from "react-hot-toast";
+import "@/app/auth/reset-password/ResetPassword.css"
+const countries = [
+  {
+    name: "Nigeria",
+    dialCode: "+234",
+    code: "NG",
+    flag: "https://flagcdn.com/ng.svg",
+  },
+  // Ajoutez d'autres pays si nécessaire
+];
 
 export default function SignUp() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  // const [country, setCountry] = useState({
-  //   name: "Nigeria",
-  //   dialCode: "+234",
-  //   code: "NG",
-  //   flag: "https://flagcdn.com/ng.svg",
-  // });
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [showPassword, setShowPassword] = useState(false);
-  const { signUp } = useSignUp();
+  const [country, setCountry] = useState({
+    name: "Nigeria",
+    dialCode: "+234",
+    code: "NG",
+    flag: "https://flagcdn.com/ng.svg",
+  });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { signUp, isLoaded } = useSignUp();
+  const { isSignedIn } = useAuth();
 
   const modalRef = useRef<HTMLDivElement | null>(null);
+
+  // Rediriger si déjà connecté
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push('/dashboard');
+    }
+  }, [isSignedIn, router]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,11 +63,11 @@ export default function SignUp() {
     };
   }, [isOpen]);
 
-  if (!signUp) return null;
+  if (!signUp || !isLoaded) return null;
 
-  // const filteredCountries = countries.filter((country) =>
-  //   country.name.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const filteredCountries = countries.filter((country) =>
+    country.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const signUpWithSocial = (strategy: OAuthStrategy) => {
     return signUp
@@ -69,8 +89,15 @@ export default function SignUp() {
 
   return (
     <div className="auth-section">
+       <AuthHeader />
+        <p className="back-to-login">
+        Already have an account?{' '}
+        <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
+          Sign in
+        </a>
+      </p>
       <section>
-        <AuthHeader />
+       
         <div className="container">
           <h1>Create your account</h1>
 
@@ -91,19 +118,62 @@ export default function SignUp() {
             </div>
           </div>
 
-          {/* <div className="line-wrap">
+          <div className="line-wrap">
             <div className="line"></div>
             <p>OR</p>
             <div className="line"></div>
           </div>
 
-          <form action="">
+          <form 
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!signUp) return;
+              
+              const formData = new FormData(e.currentTarget);
+              const email = formData.get('email') as string;
+              const password = formData.get('password') as string;
+              const firstName = formData.get('name')?.toString().split(' ')[0] || '';
+              const lastName = formData.get('name')?.toString().split(' ').slice(1).join(' ') || '';
+
+              if (!email || !password || !firstName) {
+                toast.error('Please fill in all required fields');
+                return;
+              }
+
+              try {
+                setIsLoading(true);
+                
+                // Créer le compte
+                await signUp.create({
+                  emailAddress: email,
+                  password,
+                  firstName,
+                  lastName,
+                });
+
+                // Envoyer l'email de vérification
+                await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+                
+                // Rediriger vers la page de vérification
+                router.push('/auth/verify-email');
+                
+              } catch (err: any) {
+                console.error('Error during sign up:', err);
+                const errorMessage = err.errors?.[0]?.message || 'An error occurred during sign up';
+                toast.error(errorMessage);
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            className="auth-form"
+          >
             <div className="label">
               <div className="left">
                 <label htmlFor="">Country</label>
               </div>
               <div className="right">
                 <div className="input-wrap" onClick={() => setIsOpen(!isOpen)}>
+
                   <div className="phone-btn">
                     <Image
                       src={country.flag}
@@ -172,6 +242,7 @@ export default function SignUp() {
                   name="name"
                   placeholder="Enter your name"
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -185,6 +256,7 @@ export default function SignUp() {
                   name="email"
                   placeholder="Enter your email address"
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -199,6 +271,7 @@ export default function SignUp() {
                     name="password"
                     placeholder="Set your password"
                     required
+                    disabled={isLoading}
                   />
                   <Image
                     onClick={() => setShowPassword((prev) => !prev)}
@@ -213,13 +286,19 @@ export default function SignUp() {
               </div>
             </div>
 
-            <button type="submit">
-              <div className="contain">
-                <span>Create</span>
-                <span className="hover-text">Create</span>
-              </div>
-            </button>
-          </form> */}
+            <div className="btn-wrap">
+              <button 
+                type="submit" 
+                className={`submit-button ${isLoading ? 'loading' : ''}`}
+                disabled={isLoading}
+              >
+                <div className="contain">
+                  <span>{isLoading ? 'Creating account...' : 'Create account'}</span>
+                  <span className="hover-text">{isLoading ? 'Creating account...' : 'Create account'}</span>
+                </div>
+              </button>
+            </div>
+          </form> 
 
           <div className="txt">
             By signing up, you agree to our <span>Privacy Policy</span> and{" "}
