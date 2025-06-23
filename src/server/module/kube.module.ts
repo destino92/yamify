@@ -13,6 +13,41 @@ const networkingV1Api = kc.makeApiClient(k8s.NetworkingV1Api);
 export const kube = {
   createNamespace: async (name: string) => {
     const namespace = await k8sApi.createNamespace({ body: { metadata: { name } } });
+
+    // get wildcard and annotate
+    const getYaml = await execa('kubectl', [
+      'get',
+      'secret',
+      'wildcard-eks-aiscaler-ai-tls',
+      '-n',
+      'default',
+      '-o',
+      'yaml',
+    ]);
+
+    const modifiedYaml = getYaml.stdout.replace(
+        /namespace: default/,
+        `namespace: ${name}`,
+    );
+
+    const applyProc = execa('kubectl', ['apply', '-f', '-']);
+    applyProc.stdin?.end(modifiedYaml);
+     await applyProc;
+
+
+    // annotate result
+
+     await execa('kubectl', [
+      'annotate',
+      'secret',
+      'wildcard-eks-aiscaler-ai-tls',
+      '-n',
+      `${name}`,
+      'replicator.v1.mittwald.de/replication-allowed=true',
+      'replicator.v1.mittwald.de/replication-allowed-namespaces=eks-yam',
+      '--overwrite',
+    ]);
+
     // create an ingress for the namespace
 
     return {
@@ -31,21 +66,21 @@ export const kube = {
             'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
             'nginx.ingress.kubernetes.io/ssl-passthrough': 'true',
             'nginx.ingress.kubernetes.io/ssl-redirect': 'true',
-            'external-dns.alpha.kubernetes.io/hostname': `${name}.aiscaler.ai`,
-            'cert-manager.io/cluster-issuer': 'letsencrypt-staging',
+            'external-dns.alpha.kubernetes.io/hostname': `${name}.eks.aiscaler.ai`,
+            'cert-manager.io/cluster-issuer': 'letsencrypt-production',
           },
         },
         spec: {
           ingressClassName: 'nginx',
           tls: [
             {
-              hosts: [`${name}.aiscaler.ai`],
-              secretName: `${name}-tls-cert`,
+              hosts: [`${name}.eks.aiscaler.ai`],
+              secretName: `wildcard-eks-aiscaler-ai-tls`,
             },
           ],
           rules: [
             {
-              host: `${name}.aiscaler.ai`,  // team-a.aiscaler.ai
+              host: `${name}.eks.aiscaler.ai`,  // team-a.aiscaler.ai
               http: {
                 paths: [
                   {
@@ -83,7 +118,7 @@ controlPlane:
     enabled: false
   proxy:
     extraSANs:
-      - ${namespace}.aiscaler.ai
+      - ${namespace}.eks.aiscaler.ai
 sync:
   toHost:
     ingresses:
