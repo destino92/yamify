@@ -1,0 +1,63 @@
+/* style.css */
+.education-container {
+  background-color: #111;
+  color: white;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top:100px;
+}
+
+.education-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.education-columns {
+  display: flex;
+  gap: 5rem;
+  flex-wrap: wrap;
+}
+
+.education-column {
+  flex: 1;
+  min-width: 300px;
+}
+
+.education-section {
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 0.7rem;
+}
+
+.highlighted {
+  color: #f6a72a; /* orange utilisé pour le premier titre */
+}
+
+.link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link-item {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.link-item:hover {
+  color: #f6a72a;
+}
+
+.highlighted-link {
+  color: #f6a72a;
+}
