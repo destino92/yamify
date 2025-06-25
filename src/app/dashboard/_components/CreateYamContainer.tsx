@@ -74,6 +74,7 @@ const CreateYamContainer = ({ workspaces }: Props) => {
 
       console.log({ res });
       router.push("/dashboard");
+      setSuccessBool(false);
     } catch (e) {
       console.log(e);
       setSuccessBool(true);

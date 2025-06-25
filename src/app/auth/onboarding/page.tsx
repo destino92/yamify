@@ -83,6 +83,7 @@ export default function OnboardingWorkpace() {
       if ("message" in res && res.message) {
         await user?.reload();
         router.push("/dashboard");
+        setSuccessBool(false);
         return;
       }
       // Fallback error handling

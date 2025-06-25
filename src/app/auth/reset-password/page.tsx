@@ -262,7 +262,7 @@ export default function ResetPasswordPage() {
           {
             successfulCreation && (
               <>
-                <div className="back-icon" onClick={() => router.back()}>
+                <div className="back-icon" onClick={() => setSuccessfulCreation(false)}>
                   <Image src="/svgs/arrow-left.svg" alt="Back" width={20} height={20} />
                 </div>
 
