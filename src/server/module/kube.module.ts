@@ -25,9 +25,16 @@ export const kube = {
       return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.response?.statusCode === 404) {
+      // Handle 404 errors - namespace doesn't exist
+      // Different Kubernetes clients might return errors in different formats
+      if (error.response?.statusCode === 404 || error.code === 404) {
+        console.log(`Namespace ${name} does not exist yet - this is expected`);
         return false;
       }
+      
+      // Log the error for debugging
+      console.error('Error checking namespace existence:', error);
+      
       // Re-throw other errors (network issues, auth problems, etc.)
       throw error;
     }
