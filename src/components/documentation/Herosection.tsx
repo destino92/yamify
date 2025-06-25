@@ -1,8 +1,7 @@
 "use client";
 
-import React ,{useRef,RefObject}from "react";
+import React ,{RefObject}from "react";
 import Image from "next/image";
-import Link from "next/link";
 import "@/styles/HeroSection.css";
 
 
