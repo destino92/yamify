@@ -52,18 +52,28 @@ export const createWorkspaceAction = async ({namespace, createYam}: CreateWorksp
   }
 
   try{
-    const workspace = await workspaceModule.service.create({
+    const result = await workspaceModule.service.create({
       name: namespace,
       userId,
     })
-    console.log('Workspace created for user', workspace)
-    workspaceId = workspace.id
+    
+    if (!result.workspace) {
+      return { error: result.error || 'Error creating workspace' }
+    }
+    
+    console.log('Workspace created for user', result.workspace)
+    if(result.workspace && result.workspace.id) {
+      workspaceId = result.workspace.id
+    } else {
+      return { error: 'Workspace created but no id found' }
+    }
   } catch(e) {
     console.log(e)
     if(e instanceof Error){
       console.log(e.message)
     }
     return new Response('Error creating workspace', { status: 500 })
+    
   }
 
   // create ingress for the user
@@ -253,4 +263,3 @@ export const removeProjectAction = async ({ id }: RemoveProjectParams) => {
     return { error: 'Failed to delete project' };
   }
 };
-

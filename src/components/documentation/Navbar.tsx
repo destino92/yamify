@@ -1,10 +1,8 @@
 "use client";
 
 import React, { RefObject } from "react";
-import { Search } from "lucide-react";
 import "@/styles/HeroSection.css";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 type NavItem = {
   id: string;

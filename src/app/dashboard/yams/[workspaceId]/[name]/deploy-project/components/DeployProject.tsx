@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import CreateAnimation from "@/components/Home/CreateAnimation";
 import Notification from "@/components/Notification/Notification";
+import { toast } from "sonner";
 
 type Props = {
   expandRightPanel: boolean;
@@ -79,7 +80,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
         setShowAnimation(false);
         console.error("WordPress deployment error:", result.error);
-        toast.custom(() => <Notification title="Error !!!" description={result.error} variant="error" />)
+        toast.custom(() => <Notification title="Error !!!" description={`${result.error}`} variant="error" />)
       }
     } catch (error) {
       setShowAnimation(false);
@@ -111,7 +112,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
         setShowAnimation(false);
         console.error("CodeServer deployment error:", result.error);
-        toast.custom(() => <Notification title="Error !!!" description={result.error} variant="error" />)
+        toast.custom(() => <Notification title="Error !!!" description={`${result.error}`} variant="error" />)
       }
     } catch (error) {
       setShowAnimation(false);
@@ -143,7 +144,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
         // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
         setShowAnimation(false);
         console.error("n8n deployment error:", result.error);
-        toast.custom(() => <Notification title="Error !!!" description={result.error} variant="error" />)
+        toast.custom(() => <Notification title="Error !!!" description={`${result.error}`} variant="error" />)
       }
     } catch (error) {
       setShowAnimation(false);

@@ -21,8 +21,8 @@ const DocumentationPage: React.FC = () => {
   
   // État pour gérer l'onglet actif et le mode clair/sombre
   const [activeTab, setActiveTab] = useState<string>("home");
-  const [lightMode, setLightMode] = useState<boolean>(false);
-  const [joinWaitlistModal, setJoinWaitlistModal] = useState(false);
+  const [lightMode,] = useState<boolean>(false);
+  const [, setJoinWaitlistModal] = useState(false);
 
   // Fonction pour changer d'onglet
   const handleTabChange = (tabId: string) => {
@@ -33,7 +33,7 @@ const DocumentationPage: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "faqs":
-        return <div className="relative   "> <FAQsContent contentRef={contentRef} lightMode={lightMode} /></div>;
+        return <div className="relative   "> <FAQsContent contentRef={contentRef}  /></div>;
       case "education":
         return <div className="relative top-60  flex   "> <h1 className="text-2xl font-bold mb-8 text-white relative left-30">Education</h1><EducationContent contentRef={contentRef} lightMode={lightMode} /></div>;
       case "tutorial":

@@ -19,7 +19,7 @@ const HomeContent: React.FC<Props> = ({ contentRef, lightMode, onTabChange }) =>
       <div className="doc-content-grid ">
         <div className="content-card">
           <h2>FAQs</h2>
-          <p>Got questions? We've answered the most common ones about using Yamify—from how it works to what you can deploy. Whether you're just curious or ready to launch, start here.</p>
+          <p>Got questions? We&apos;ve answered the most common ones about using Yamify—from how it works to what you can deploy. Whether you&apos;re just curious or ready to launch, start here.</p>
           <div className="  relative left-10">
           <Button linkBtn={false}  yellow={true} onClick={() => onTabChange("faqs")} text="Read FAQs" />
 
@@ -29,7 +29,7 @@ const HomeContent: React.FC<Props> = ({ contentRef, lightMode, onTabChange }) =>
         
         <div className="content-card">
           <h2>Education</h2>
-          <p className=" border-b-1 border-white m-0 pb-10">New to infrastructure or curious about how Yamify works behind the scenes? Our educational content breaks down key concepts in simple terms—so you understand the "why" not just the "how."</p>
+          <p className=" border-b-1 border-white m-0 pb-10">New to infrastructure or curious about how Yamify works behind the scenes? Our educational content breaks down key concepts in simple terms—so you understand the &quot;why&quot; not just the &quot;how&quot;.</p>
           <div className="  relative left-10">
           <Button linkBtn={false} yellow={true} onClick={() => onTabChange("education")} text="Start Learning" />
 

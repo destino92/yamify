@@ -50,7 +50,7 @@ const ProjectCard = ({ project, onProjectDeleted, lightMode = false }: ProjectCa
       }
     } catch (err) {
       console.error("Error deleting project:", err);
-       toast.custom(() => <Notification title="Error !!!" description={result.error || "An unexpected error occurred"} variant="error" />)
+      toast.custom(() => <Notification title="Error !!!" description="An unexpected error occurred" variant="error" />)
     }
   };
   

@@ -44,7 +44,7 @@ const TutorialContent: React.FC<Props> = ({ contentRef, lightMode }) => {
             Tutorials
           </h1>
           <p className={`mb-12 text-lg ${lightMode ? "text-gray-600" : "text-gray-300"}`}>
-            Follow our hands-on tutorials to master Yamify's features and deploy applications with confidence.
+            Follow our hands-on tutorials to master Yamify&apos;s features and deploy applications with confidence.
           </p>
           
           <div className="grid md:grid-cols-2 gap-6">

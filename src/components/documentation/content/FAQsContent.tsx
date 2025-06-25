@@ -5,14 +5,13 @@ import "@/styles/HeroSection.css";
 
 interface Props {
   contentRef: RefObject<HTMLDivElement | null>;
-  lightMode: boolean;
 }
 
-const FAQsContent: React.FC<Props> = ({ contentRef, lightMode }) => {
+const FAQsContent: React.FC<Props> = ({ contentRef }) => {
   const [openFaq, setOpenFaq] = useState(0); // Premier FAQ ouvert par défaut
 
-  const toggleFaq = (index:any) => {
-    setOpenFaq(openFaq === index ? null : index);
+  const toggleFaq = (index:number) => {
+    setOpenFaq(openFaq === index ? 0 : index);
   };
 
   const faqs = [

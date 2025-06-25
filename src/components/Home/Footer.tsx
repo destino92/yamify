@@ -1,9 +1,17 @@
-import React from "react";
+import React, { RefObject } from "react";
 import "@/styles/Footer.css";
 import Image from "next/image";
 import Link from "next/link";
 
-const Footer = () => {
+// Define props interface for the Footer component
+interface FooterProps {
+  featuresRef?: RefObject<HTMLDivElement | null>;
+  contactRef?: RefObject<HTMLDivElement | null>;
+  heroRef?: RefObject<HTMLDivElement | null>;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Footer = ({ featuresRef, contactRef, heroRef }: FooterProps) => {
   return (
     <footer>
       <section>
