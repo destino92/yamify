@@ -1,4 +1,4 @@
-// import routes from "@/libs/routes";
+import routes from "@/libs/routes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,10 +23,10 @@ const AuthHeader = () => {
           width={20}
           height={25.333}
         />
-        <h1 className="text-white">Yamify</h1>
+        <h1>Yamify</h1>
       </Link>
 
-      {/* pathname !== "/auth/sign-in" ? (
+      {pathname !== "/auth/sign-in" ? (
         <div className="wrap">
           <p>Already have an account?</p>
           <Link href={routes.auth.login}>Sign in</Link>
@@ -36,7 +36,7 @@ const AuthHeader = () => {
           <p>Need an account?</p>
           <Link href={routes.auth.signup}>Sign up</Link>
         </div>
-      ) */}
+      )}
     </div>
   );
 };

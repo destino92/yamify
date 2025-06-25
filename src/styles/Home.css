@@ -9,6 +9,19 @@
 .home.light-mode .section-containers {
   border: 0.5px dashed var(--Default-Ash, #b8b8b8);
 }
+.home .ai_logo_fixed {
+  position: fixed;
+  bottom: 10%;
+  right: 10%;
+  z-index: 100000000000000000000;
+  display: flex;
+  padding: 12px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--Default-Dark-Ash, #202020);
+  background: var(--Default-Black, #111);
+  cursor: pointer;
+}
 .home .section-containers {
   max-width: 1312px;
   width: 100%;

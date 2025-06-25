@@ -6,14 +6,15 @@ const SpeakStackSection = () => {
     <div className="speak-stack-section">
       <section>
         <div className="head">
-          <h1>We speak your stack.</h1>
+          <h1>How Yamify works</h1>
           <p>
-            Auto-detects your language & build method from GitHub. Just connect
-            and deploy
+            No more juggling tools or dealing with complex setups. Yamify brings
+            everything you need into one place—so you can go from idea to
+            deployment without breaking focus.
           </p>
         </div>
 
-        <div className="languages">
+        {/* <div className="languages">
           <div className="box">
             <Image src="/svgs/java_svg.svg" alt="" width={30} height={30} />
           </div>
@@ -48,7 +49,7 @@ const SpeakStackSection = () => {
           <div className="box">
             <Image src="/svgs/ai_bionic.svg" alt="" width={30} height={30} />
           </div>
-        </div>
+        </div> */}
 
         <div className="process-container">
           <div className="row">

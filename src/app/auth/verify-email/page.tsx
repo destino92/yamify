@@ -2,9 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useUser, useSignUp } from '@clerk/nextjs';
-import { useState, useEffect, useRef, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent, useMemo } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import CreateAnimation from '@/components/Home/CreateAnimation';
 import AuthHeader from '../_components/AuthHeader';
 import "@/styles/AuthPage.css";
@@ -41,15 +40,17 @@ const VerifyEmail = () => {
     }
   }, [verificationSuccess, router]);
   
-  // Refs for inputs
-  const inputRefs = [
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-  ];
+  // Refs for inputs - memoized to prevent recreation on each render
+  const inputRefs = useMemo(() => {
+    return [
+      React.createRef<HTMLInputElement>(),
+      React.createRef<HTMLInputElement>(),
+      React.createRef<HTMLInputElement>(),
+      React.createRef<HTMLInputElement>(),
+      React.createRef<HTMLInputElement>(),
+      React.createRef<HTMLInputElement>(),
+    ];
+  }, []);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -67,7 +68,7 @@ const VerifyEmail = () => {
     if (signUp?.emailAddress) {
       setEmailAddress(signUp.emailAddress);
     }
-  }, [signUp]);
+  }, [isLoaded, isSignedIn, router, signUp, inputRefs]);
 
   const handleInputChange = (index: number, value: string) => {
     if (value.length > 1) {
@@ -196,6 +197,7 @@ const VerifyEmail = () => {
 
   return (
     <div className="auth-section">
+      <AuthHeader />
       <section>
         <div className="container">
           <div className="back-icon" onClick={() => router.back()}>
@@ -242,7 +244,7 @@ const VerifyEmail = () => {
           </form>
           
           <div className="resend-container">
-            <p>Didn't receive a code?{' '}
+            <p>Didn&apos;t receive a code?{' '}
               <button 
                 type="button" 
                 onClick={handleResendCode}

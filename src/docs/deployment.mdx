@@ -1,0 +1,62 @@
+# Deployment Guide
+
+This guide explains how to deploy an application on the Yamify platform.
+
+## Prerequisites
+
+Before starting, make sure you have:
+
+- An active Yamify account
+- At least one workspace created
+- A Yam configured in your workspace
+
+If you haven't configured these elements yet, check out our [Getting Started Guide](/getting-started).
+
+## Deployment Steps
+
+### 1. Accessing Your Yam
+
+1. Log in to your Yamify account
+2. Access the main dashboard
+3. Select the workspace containing your Yam in the side menu
+4. Click on "Yam" in the navigation menu
+5. Select the Yam in which you want to deploy an application
+
+![Yam Selection](/images/select-yam.png)
+
+### 2. Deploying an Application
+
+1. On your Yam page, click on the **Deploy Project** button
+2. You will be redirected to the deployment page (`/dashboard/yams/[workspaceId]/[name]/deploy-project`)
+3. Choose the application you want to deploy from the available options
+4. For this example, we will deploy **n8n**, a workflow automation tool
+
+![Deployment Page](/images/deploy-page.png)
+
+### 3. Deployment Process
+
+1. Click on the **n8n** application card
+2. A loading indicator will appear while your application is being deployed
+3. Once the deployment is complete, you will receive a success notification
+4. You will be automatically redirected to your Yam page (`/dashboard/yams/[workspaceId]/[name]`)
+
+![Deployment in Progress](/images/deployment-progress.png)
+
+### 4. Accessing Your Deployed Application
+
+1. On your Yam page, you will now see a new card for the n8n application you just deployed
+2. Click on the provided URL to access your n8n instance
+
+![Deployed Application](/images/deployed-app.png)
+
+## Important Limitations
+
+> **Note:** You cannot deploy two applications of the same type (such as two n8n instances) in the same Yam. If you want to deploy another instance of the same application, you will need to create a new Yam.
+
+## Available Applications
+
+To discover all the applications you can deploy, check out our [application catalog](/applications).
+
+## Troubleshooting
+
+If you encounter difficulties during deployment, check our [troubleshooting guide](/troubleshooting) or [contact our support](https://yamify.co/contact).

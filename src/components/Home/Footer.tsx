@@ -1,81 +1,33 @@
-import React, { RefObject } from "react";
+import React from "react";
 import "@/styles/Footer.css";
 import Image from "next/image";
 import Link from "next/link";
 
-type Props = {
-  // setJoinWaitlistModal: (value: boolean) => void;
-  heroRef: RefObject<HTMLDivElement | null>;
-  featuresRef: RefObject<HTMLDivElement | null>;
-  contactRef: RefObject<HTMLDivElement | null>;
-};
-
-const Footer = ({
-  // setJoinWaitlistModal,
-  heroRef,
-  featuresRef,
-  contactRef,
-}: Props) => {
-  const handleScrollToWork = (e: React.MouseEvent) => {
-    e.preventDefault();
-    scrollToSection(heroRef);
-  };
-
-  const handleScrollToCapability = (e: React.MouseEvent) => {
-    e.preventDefault();
-    scrollToSection(featuresRef);
-  };
-
-  const scrollToSection = (ref: RefObject<HTMLElement | null>) => {
-    setTimeout(() => {
-      ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 300); // Delay to ensure DOM is ready after navigation
-  };
-
+const Footer = () => {
   return (
-    <footer ref={contactRef}>
+    <footer>
       <section>
         <div className="container-footer">
           <div className="left">
             <h2>Navigations</h2>
-            {/* <Image
-              src="/svgs/top_left_corner_pin.svg"
-              className="pin bottom-left"
-              alt=""
-              width={21}
-              height={21}
-            />
-            <Image
-              src="/svgs/top_left_corner_pin.svg"
-              className="pin bottom-right"
-              alt=""
-              width={21}
-              height={21}
-            />
-            <Image
-              src="/svgs/top_right_corner_pin.svg"
-              className="pin top-right"
-              alt=""
-              width={21}
-              height={21}
-            /> */}
 
             <div className="links">
-              <div className="nav-link" onClick={handleScrollToWork}>
-                <span>Home</span>
-                <span className="hover-text">Home</span>
-              </div>
-              <div className="nav-link" onClick={handleScrollToCapability}>
-                <span>Features</span>
-                <span className="hover-text">Features</span>
-              </div>
-              <div
-                className="nav-link"
-                // onClick={() => setJoinWaitlistModal(true)}
-              >
-                <span>Contact</span>
-                <span className="hover-text">Contact</span>
-              </div>
+              <Link href="#" className="nav-link">
+                <span>Blog</span>
+                <span className="hover-text">Blog</span>
+              </Link>
+              <Link href="#" className="nav-link">
+                <span>Docs</span>
+                <span className="hover-text">Docs</span>
+              </Link>
+              <Link href="#" className="nav-link">
+                <span>Community</span>
+                <span className="hover-text">Community</span>
+              </Link>
+              <Link href="#" className="nav-link">
+                <span>Technical Support</span>
+                <span className="hover-text">Technical Support</span>
+              </Link>
             </div>
           </div>
           <div className="right">
@@ -98,20 +50,33 @@ const Footer = ({
               <p>
                 Yamify is Africa’s first sovereign cloud infrastructure
                 platform, built to empower developers, startups, and enterprises
-                with instant access to secure, scalable resources.{" "}
+                with instant access to secure, scalable resources.
               </p>
             </div>
 
-            <div className="socials">
-              <Link href="#" target="_blank">
-                <Image src="/svgs/Facebook.svg" alt="" width={20} height={20} />
-              </Link>
-              <Link href="#" target="_blank">
-                <Image src="/svgs/Github.svg" alt="" width={20} height={20} />
-              </Link>
-              <Link href="#" target="_blank">
-                <Image src="/svgs/Linkedin.svg" alt="" width={20} height={20} />
-              </Link>
+            <div className="social-container">
+              <h4>Social media links</h4>
+              <div className="socials">
+                <Link href="#" target="_blank">
+                  <Image
+                    src="/svgs/Facebook.svg"
+                    alt=""
+                    width={15}
+                    height={15}
+                  />
+                </Link>
+                <Link href="#" target="_blank">
+                  <Image src="/svgs/Github.svg" alt="" width={15} height={15} />
+                </Link>
+                <Link href="#" target="_blank">
+                  <Image
+                    src="/svgs/Linkedin.svg"
+                    alt=""
+                    width={15}
+                    height={15}
+                  />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

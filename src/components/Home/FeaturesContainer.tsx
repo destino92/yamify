@@ -28,13 +28,30 @@ const FeaturesContainer = () => {
       </div>
 
       <div className="features">
-        <p>Yam</p>
-        <p>Workspace</p>
-        <p>AI Assistant</p>
-        <p>Wallet</p>
-        <p>Marketplace</p>
-        <p>Marketplace</p>
-        <p>Group</p>
+        <div className="nav-link">
+          <span>Yam</span>
+          <span className="hover-text">Yam</span>
+        </div>
+        <div className="nav-link">
+          <span>Workspace</span>
+          <span className="hover-text">Workspace</span>
+        </div>
+        <div className="nav-link">
+          <span>AI Assistant</span>
+          <span className="hover-text">AI Assistant</span>
+        </div>
+        <div className="nav-link">
+          <span>Wallet</span>
+          <span className="hover-text">Wallet</span>
+        </div>
+        <div className="nav-link">
+          <span>Marketplace</span>
+          <span className="hover-text">Marketplace</span>
+        </div>
+        <div className="nav-link">
+          <span>Group</span>
+          <span className="hover-text">Group</span>
+        </div>
       </div>
 
       <div style={{ width: 204 }} className="yamify-box">

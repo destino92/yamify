@@ -9,11 +9,9 @@ export const yamService = {
   createAndStoreVCluster: async (clusterName: string, namespace: string, workspaceId: string) => {
     const response = await kube.createVCluster(clusterName, namespace);
     const kubeconfig = await kube.retrieveKubeconfig(clusterName, namespace);
-    const defaultNamespace = await kube.createVclusterNamespace(kubeconfig, 'default')
 
     console.log({response})
     console.log({kubeconfig})
-    console.log({defaultNamespace})
     
     await yamRepository.create({
         name: clusterName,

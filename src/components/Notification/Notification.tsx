@@ -1,116 +1,72 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { NotificationType, Notification as NotificationData } from '@/stores/useNotificationStore';
+import React from 'react';
+import { toast as sonnerToast } from 'sonner';
 import "@/styles/Notification.css";
 
-interface NotificationProps {
-  notification: NotificationData;
-  onClose: (id: string) => void;
-  lightMode?: boolean;
-}
-
-const getIcon = (type: NotificationType) => {
-  switch (type) {
+function getToastIcon(variant: 'success' | 'error' | 'info') {
+  switch (variant) {
     case 'success':
       return (
-        <svg className="h-5 w-5 text-green-900 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M20 6L9 17L4 12" stroke="#59BF62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
       );
     case 'error':
       return (
-        <svg className="h-5 w-5 text-red-700 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#E22D1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> 
+          <path d="M12 16V12" stroke="#E22D1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M12 8H12.01" stroke="#E22D1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       );
-    case 'warning':
+    case 'info':
       return (
-        <svg className="h-5 w-5 text-yellow-700 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M13.73 21C13.5542 21.3031 13.3018 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="#E6E6E6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
-      );
+      );  
     default:
-      return (
-        <svg className="h-5 w-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      );
+      return null;
   }
-};
+}
 
-const Notification: React.FC<NotificationProps> = ({ notification, onClose, lightMode = false }) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const handleClose = useCallback(() => {
-    setIsVisible(false);
-    setTimeout(() => onClose(notification.id), 300); // Attendre la fin de l'animation
-  }, [onClose, notification.id]);
-  
-  useEffect(() => {
-    // Montre la notification avec une petite animation 
-    setTimeout(() => setIsVisible(true), 10);
-    
-    // Programme la fermeture de la notification si une durée est définie
-    if (notification.duration) {
-      const timer = setTimeout(() => {
-        handleClose();
-      }, notification.duration);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [handleClose, notification]);
-  
-  // Applique la classe light-mode si lightMode est true
-  const notificationClass = `notification ${notification.type} ${isVisible ? '' : 'exit'} ${lightMode ? 'light-mode' : ''}`;
+/** A fully custom toast that still maintains the animations and interactions. */
+export default function Notification(props: ToastProps) {
+  const { title, description, variant } = props;
 
   return (
-    <div 
-      className={notificationClass}
-      role="alert"
-    >
-      <div className="notification-content">
-        <div className="notification-header gap-10">
-          <div className="notification-icon-text flex items-center">
-            {getIcon(notification.type)}
-            
-              {notification.title && (
-                <div className="notification-title  ">
-                  {notification.title}
-                </div>
-              )}
-              <div className="notification-message ml-8 flex items-center text-left">
-                {notification.message}
-             
-            </div>
-
-
-           
-          </div>
-          <button 
-            type="button" 
-            className="notification-close " 
-            onClick={handleClose}
-            aria-label="Fermer la notification"
-          >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          
-         
+    <div className={`notification-container ${variant === 'info' ? '' : variant}`}>
+      <div className={`notification-icon-containter ${variant === 'info' ? '' : variant}`}>
+        <div className="notification-icon">
+            {getToastIcon(variant)}
         </div>
-       
-
-
-
       </div>
-      
-      {notification.duration && (
-        <div className={`notification-progress ${notification.type}`} />
-      )}
+      <div className="notification-content">
+        <div className="notification-header">
+            <div className="notification-title">
+              <h3 className={`notification-title-text ${variant === 'info' ? '' : variant}`}>{title}</h3>
+            </div>
+            <div className="notification-close">
+                <div className="icon" onClick={() => { sonnerToast.dismiss();}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                        <path d="M11.25 3.75L3.75 11.25M3.75 3.75L11.25 11.25" stroke="#E6E6E6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div className=".notification-body">
+            <div className="notification-message">
+                <p>{description}</p>
+            </div>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
-export default Notification;
+interface ToastProps {
+  title: string;
+  description: string;
+  variant: 'success' | 'error' | 'info';
+}

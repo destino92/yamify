@@ -3,76 +3,159 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { execa } from 'execa';
 import * as k8s from '@kubernetes/client-node';
+import type { CoreV1ApiCreateNamespaceRequest, CoreV1ApiReadNamespaceRequest } from '@kubernetes/client-node';
 
 const kc = new k8s.KubeConfig();
 // kc.loadFromFile(process.env.KUBECONFIG_PATH || '');
 kc.loadFromDefault();
-const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+const coreV1Api = kc.makeApiClient(k8s.CoreV1Api);
 const networkingV1Api = kc.makeApiClient(k8s.NetworkingV1Api);
 
 export const kube = {
+  checkNamespaceExists: async (name: string): Promise<boolean> => {
+    try {
+      const request: CoreV1ApiReadNamespaceRequest = {
+          // name of the Namespace
+        name,
+          // If \'true\', then the output is pretty printed. Defaults to \'false\' unless the user-agent indicates a browser or command-line HTTP tool (curl and wget). (optional)
+        pretty: "true",
+      };
+      const existingNamespace = await coreV1Api.readNamespace(request);
+      console.log({existingNamespace});
+      return true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.response?.statusCode === 404) {
+        return false;
+      }
+      // Re-throw other errors (network issues, auth problems, etc.)
+      throw error;
+    }
+  },
+  
   createNamespace: async (name: string) => {
-    const namespace = await k8sApi.createNamespace({ body: { metadata: { name } } });
-    // create an ingress for the namespace
+    try {
+      const request: CoreV1ApiCreateNamespaceRequest = {
+        body: {
+          metadata: {
+            name: name,
+            labels: {
+              'yamify.co/workspace': name,
+              'yamify.co/managed': 'true'
+            }
+          }
+        }
+      };
 
-    return {
-      namespace,
-    };
+      const namespace = await coreV1Api.createNamespace(request);
+      return namespace;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.response?.statusCode === 409) {
+        throw new Error(`Namespace "${name}" already exists`);
+      }
+      throw error;
+    }
   },  
 
   createNamespaceIngress: async (name: string) => {
-    const response = await networkingV1Api.createNamespacedIngress({
-      namespace: name,
-      body: {
-        metadata: {
-          name: `${name}-ingress`,
-          annotations: {
-            // 'kubernetes.io/ingress.class': 'nginx',
-            'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
-            'nginx.ingress.kubernetes.io/ssl-passthrough': 'true',
-            'nginx.ingress.kubernetes.io/ssl-redirect': 'true',
-            'external-dns.alpha.kubernetes.io/hostname': `${name}.aiscaler.ai`,
-            'cert-manager.io/cluster-issuer': 'letsencrypt-staging',
-          },
-        },
-        spec: {
-          ingressClassName: 'nginx',
-          tls: [
-            {
-              hosts: [`${name}.aiscaler.ai`],
-              secretName: `${name}-tls-cert`,
+    try {
+      const response = await networkingV1Api.createNamespacedIngress({
+        namespace: name,
+        body: {
+          metadata: {
+            name: `${name}-ingress`,
+            labels: {
+              'yamify.co/workspace': name,
+              'yamify.co/managed': 'true'
             },
-          ],
-          rules: [
-            {
-              host: `${name}.aiscaler.ai`,  // team-a.aiscaler.ai
-              http: {
-                paths: [
-                  {
-                    path: '/',
-                    pathType: 'ImplementationSpecific',
-                    backend: {
-                      service: {
-                        name: name,
-                        port: {
-                          number: 443,
+            annotations: {
+              // 'kubernetes.io/ingress.class': 'nginx',
+              'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
+              'nginx.ingress.kubernetes.io/ssl-passthrough': 'true',
+              'nginx.ingress.kubernetes.io/ssl-redirect': 'true',
+              'external-dns.alpha.kubernetes.io/hostname': `${name}.aiscaler.ai`,
+              'cert-manager.io/cluster-issuer': 'letsencrypt-staging',
+            },
+          },
+          spec: {
+            ingressClassName: 'nginx',
+            tls: [
+              {
+                hosts: [`${name}.aiscaler.ai`],
+                secretName: `${name}-tls-cert`,
+              },
+            ],
+            rules: [
+              {
+                host: `${name}.aiscaler.ai`,  // team-a.aiscaler.ai
+                http: {
+                  paths: [
+                    {
+                      path: '/',
+                      pathType: 'ImplementationSpecific',
+                      backend: {
+                        service: {
+                          name: name,
+                          port: {
+                            number: 443,
+                          },
                         },
                       },
                     },
-                  },
-                ],
+                  ],
+                }
               }
-            }
-          ]
+            ]
+          }
         }
-      }
-    });
+      });
 
-    console.log({response})
+      return response;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.response?.statusCode === 409) {
+        throw new Error(`Ingress for namespace "${name}" already exists`);
+      }
+      throw error;
+    }
   },
 
   deleteNamespace: async (name: string) => {
-    await k8sApi.deleteNamespace({name});
+    try {
+      await coreV1Api.deleteNamespace({name});
+      // Wait for namespace to be fully deleted (with timeout)
+      await kube.waitForNamespaceDeletion(name, 60000); // 60 seconds timeout
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.response?.statusCode === 404) {
+        console.log(`Namespace "${name}" already deleted`);
+        return;
+      }
+      throw error;
+    }
+  },
+
+  waitForNamespaceDeletion: async (name: string, timeoutMs: number): Promise<void> => {
+    const startTime = Date.now();
+    
+    while (Date.now() - startTime < timeoutMs) {
+      try {
+        const exists = await kube.checkNamespaceExists(name);
+        if (!exists) {
+          return;
+        }
+        
+        // Wait 2 seconds before checking again
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (error) {
+        console.warn('Error checking namespace deletion status:', error);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+    }
+    
+    throw new Error(`Timeout waiting for namespace "${name}" to be deleted`);
   },
 
   createVCluster: async (name: string, namespace: string) => {
@@ -420,14 +503,6 @@ ingress:
     // Add and update Helm repository
     await execa('helm', ['repo', 'add', 'community-charts', 'https://community-charts.github.io/helm-charts']);
     await execa('helm', ['repo', 'update']);
-
-    // Create namespace inside vCluster if not exists
-    // await execa('kubectl', [
-    //   '--kubeconfig', kubeconfigPath,
-    //   'create', 'namespace', namespace,
-    // ]).catch((err) => {
-    //   if (!err.stderr?.includes('AlreadyExists')) throw err;
-    // });
 
     // Install n8n via Helm
     await execa('helm', [

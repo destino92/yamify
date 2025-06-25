@@ -20,9 +20,9 @@ const NewCapacitySection = ({ featuresRef }: Props) => {
               <h2>Yam</h2>
               <div className="content">
                 <p>
-                  A Yam is your own isolated Kubernetes environment — built for
-                  control, scalability, and speed. Deploy, monitor, and manage
-                  apps, without touching raw YAML.
+                  A Yam is your private Kubernetes space — built for speed,
+                  scale, and control. Deploy and manage apps without touching
+                  YAML.
                 </p>
                 <div className="no">01</div>
               </div>
@@ -32,9 +32,9 @@ const NewCapacitySection = ({ featuresRef }: Props) => {
               <h2>Workspace</h2>
               <div className="content">
                 <p>
-                  A Workspace is a dedicated environment — built on its own
-                  namespace and resources. Each Workspace houses one Yam, your
-                  apps, usage metrics, and team access — all in one place.
+                  A Workspace is your dedicated environment with its own
+                  resources. It holds one Yam, your apps, usage, and team
+                  access.{" "}
                 </p>
                 <div className="no">02</div>
               </div>
@@ -52,8 +52,8 @@ const NewCapacitySection = ({ featuresRef }: Props) => {
               </h2>
               <div className="content">
                 <p>
-                  Yamify’s built-in AI helps you set up, configure, and optimize
-                  your environment based on your project type.
+                  Yamify’s AI helps you set up, configure, and optimize your
+                  environment based on your project type.
                 </p>
               </div>
             </div>
@@ -113,8 +113,8 @@ const NewCapacitySection = ({ featuresRef }: Props) => {
               </h2>
               <div className="content">
                 <p>
-                  Your Yamify wallet lets you manage cloud usage in your local
-                  currency with full transparency. 
+                  Manage your cloud usage in local currency with full
+                  transparency through your Yamify wallet.
                 </p>
               </div>
             </div>
@@ -142,9 +142,8 @@ const NewCapacitySection = ({ featuresRef }: Props) => {
               <h2>Marketplace</h2>
               <div className="content">
                 <p>
-                  Browse and install ready-to-use services and integrations.
-                  From wordpress to deployment helpers, the Marketplace lets you
-                  enhance your Yam in just a few clicks.
+                  Install services like WordPress or deployment helpers in a few
+                  clicks to boost your Yam’s power.
                 </p>
                 <div className="no">05</div>
               </div>
@@ -176,9 +175,8 @@ const NewCapacitySection = ({ featuresRef }: Props) => {
               <h2>Groups</h2>
               <div className="content">
                 <p>
-                  Groups let you categorize apps within a Yam — like staging,
-                  production, or AI tools. Every app belongs to a group, making
-                  it easy to manage deployments and track resource usage.
+                  Groups help organize your apps inside a Yam—like staging,
+                  production, or AI—so you can manage and monitor with ease.
                 </p>
                 <div className="no">06</div>
               </div>
