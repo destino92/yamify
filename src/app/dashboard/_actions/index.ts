@@ -3,7 +3,6 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { yamModule } from '@/server/module/yam.module';
 import { workspaceModule } from '@/server/module/workspace.module';
-import { kube } from '@/server/module/kube.module';
 import { projectModule } from '@/server/module/project.module';
 import prisma from '@/libs/prisma';
 
@@ -45,40 +44,38 @@ interface CreateWorkspaceData {
 export const createWorkspaceAction = async ({namespace, createYam}: CreateWorkspaceData) => {
   const { userId } = await auth()
   const user = await currentUser()
-  let workspaceId
 
   if (!user || !userId) {
-    return { message: 'No Logged In User' }
+    return { error: 'No Logged In User', code: 'UNAUTHORIZED' }
   }
 
-  try{
-    const workspace = await workspaceModule.service.create({
-      name: namespace,
-      userId,
-    })
-    console.log('Workspace created for user', workspace)
-    workspaceId = workspace.id
-  } catch(e) {
-    console.log(e)
-    if(e instanceof Error){
-      console.log(e.message)
-    }
-    return new Response('Error creating workspace', { status: 500 })
-  }
+  const { id } = user
+  let workspaceId
 
-  // create ingress for the user
   try {
-    const response = await kube.createNamespaceIngress(namespace)
-    console.log('Ingress created for workspace', response)
-  } catch(e) {
-    console.error(e)
-    if(e instanceof Error){
-      console.error(e.message)
+    const result = await workspaceModule.service.create({
+      name: namespace,
+      userId: id,
+    })
+    
+    if (result.error) {
+      return {
+        error: result.error,
+        code: result.code
+      }
     }
-    return new Response('Error creating ingress', { status: 500 })
+
+    console.log('Workspace created for user', result.workspace)
+    workspaceId = result?.workspace?.id
+  } catch(e) {
+    console.error('Unexpected error creating workspace:', e)
+    return { 
+      error: 'An unexpected error occurred while creating workspace', 
+      code: 'WORKSPACE_CREATION_FAILED' 
+    }
   }
 
-  if(createYam){
+  if(createYam && workspaceId){
     try {
       const yam = await yamModule.service.createAndStoreVCluster(namespace, 
         namespace,
@@ -86,12 +83,16 @@ export const createWorkspaceAction = async ({namespace, createYam}: CreateWorksp
       )
       console.log('Yam created for workspace', yam)
     } catch(e) {
-      console.error(e)
-      if(e instanceof Error){
-        console.error(e.message)
-      }
-      return new Response('Error creating yam', { status: 500 })
+      console.error('Error creating yam:', e)
+      // Don't fail the entire onboarding if yam creation fails
+      // The user can create it later from the dashboard
+      console.warn('Yam creation failed, but continuing with onboarding')
     }
+  }
+
+  return { 
+    success: true,
+    message: 'Onboarding completed successfully'
   }
 }
 

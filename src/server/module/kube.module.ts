@@ -25,7 +25,8 @@ export const kube = {
       return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.response?.statusCode === 404) {
+      console.log({error})
+      if (error.code === 404) {
         return false;
       }
       // Re-throw other errors (network issues, auth problems, etc.)

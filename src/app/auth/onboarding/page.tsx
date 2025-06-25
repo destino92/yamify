@@ -21,8 +21,8 @@ const ERROR_MESSAGES = {
   },
   WORKSPACE_EXISTS: {
     title: "Duplicate Workspace",
-    description: "You already have a workspace with this name.",
-    suggestion: "Choose a different name or check your existing workspaces.",
+    description: "This workspace name is already taken. Please choose a different name.",
+    suggestion: "Choose a different name.",
     actionable: true
   },
   NAMESPACE_FAILED: {
