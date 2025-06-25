@@ -6,6 +6,7 @@ import CreateYamContainer from "./CreateYamContainer";
 // import Link from "next/link";
 import { SelectWorkspace } from "@/types/server";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 type Props = {
   expandRightPanel: boolean;

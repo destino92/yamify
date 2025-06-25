@@ -60,7 +60,7 @@ const CreateWorkspaceDialog = ({ setShowWorkspaceDialog, loadingTxts }: Props) =
       console.log({ res });
       router.push("/dashboard");
       setSuccessBool(false);
-      setShowYamDialog(false);
+      setShowWorkspaceDialog(false);
     } catch (e) {
       console.log(e);
       setSuccessBool(true);
@@ -71,7 +71,7 @@ const CreateWorkspaceDialog = ({ setShowWorkspaceDialog, loadingTxts }: Props) =
     <div className="create-yam-dialog">
       <div className="background-opacity "></div>
       <div className="dialog-contain">
-        <div className="close-btn" onClick={() => setShowYamDialog(false)}>
+        <div className="close-btn" onClick={() => setShowWorkspaceDialog(false)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
