@@ -1,15 +1,12 @@
-import DashboardHeader from "@/app/dashboard/_components/DashboardHeader";
 import "@/styles/RightPanelDashboard.css";
 import "@/styles/DeployProject.css";
 // import Image from "next/image";
 
 type Props = {
   expandRightPanel: boolean;
-  setShowYamDialog: (Callback: boolean) => void;
-  setShowAiModal: (Callback: boolean) => void;
 };
 
-const InstallWordpress = ({ expandRightPanel, setShowAiModal }: Props) => {
+const InstallWordpress = ({ expandRightPanel }: Props) => {
   return (
     <div
       className={`right-panel right-panel-yams ${
@@ -18,7 +15,6 @@ const InstallWordpress = ({ expandRightPanel, setShowAiModal }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         <div className="section-deploy">
           <div className="back-btn">

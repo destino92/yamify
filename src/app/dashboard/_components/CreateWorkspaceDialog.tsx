@@ -6,11 +6,11 @@ import { createWorkspaceAction } from "../_actions";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  setShowYamDialog: (Callback: boolean) => void;
+  setShowWorkspaceDialog: (Callback: boolean) => void;
   loadingTxts: string[];
 };
 
-const CreateWorkspaceDialog = ({ setShowYamDialog, loadingTxts }: Props) => {
+const CreateWorkspaceDialog = ({ setShowWorkspaceDialog, loadingTxts }: Props) => {
   const [successBool, setSuccessBool] = useState(false);
   const [createYam, setCreateYam] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");

@@ -3,21 +3,18 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import CreateYamContainer from "./CreateYamContainer";
-import Link from "next/link";
-import DashboardHeader from "./DashboardHeader";
+// import Link from "next/link";
 import { SelectWorkspace } from "@/types/server";
 import { useUser } from "@clerk/nextjs";
 
 type Props = {
   expandRightPanel: boolean;
-  setShowAiModal: (Callback: boolean) => void;
   workspaces: SelectWorkspace[];
 };
 
 const RightPanel = ({
   expandRightPanel,
   workspaces,
-  setShowAiModal,
 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mainInputRef = useRef<HTMLInputElement>(null);
@@ -95,10 +92,9 @@ const RightPanel = ({
   if (!user) return;
 
   return (
-    <div className={`right-panel ${expandRightPanel && "not-expand"}`}>
+    <div className={`right-panel ${expandRightPanel && "not-expand" } w-full`}>
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         <div className="section">
           <div className="intro-welcome">

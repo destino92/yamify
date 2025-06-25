@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import AuthHeader from "../_components/AuthHeader";
 import "@/styles/AuthPage.css";
 import "./NewPassword.css";
@@ -10,7 +10,8 @@ import { useSignIn } from "@clerk/nextjs";
 import toast from 'react-hot-toast';
 import "@/app/auth/reset-password/ResetPassword.css"
 
-export default function NewPasswordPage() {
+// Composant interne qui utilise useSearchParams
+function NewPasswordForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -61,9 +62,10 @@ export default function NewPasswordPage() {
           router.push('auth/sign-in');
         }, 3000);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error resetting password:", err);
-      const errorMessage = err.errors?.[0]?.message || "An error occurred while resetting your password. Please try again.";
+      const clerkError = err as { errors?: Array<{ message: string }> };
+      const errorMessage = clerkError.errors?.[0]?.message || "An error occurred while resetting your password. Please try again.";
       toast.error(errorMessage);
       setError(errorMessage);
     } finally {
@@ -75,12 +77,12 @@ export default function NewPasswordPage() {
     return (
       <div className="auth-section">
        <AuthHeader />
-                      <p className="back-to-login">
-                        Remember your password?{' '}
-                        <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
-                          Sign in
-                        </a>
-                      </p>
+        <p className="back-to-login">
+          Remember your password?{' '}
+          <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
+            Sign in
+          </a>
+        </p>
         
         <section>
           <div className="container">
@@ -113,13 +115,12 @@ export default function NewPasswordPage() {
   return (
     <div className="auth-section">
       <AuthHeader />
-                      <p className="back-to-login">
-                        Remember your password?{' '}
-                        <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
-                          Sign in
-                        </a>
-                      </p>
-        
+      <p className="back-to-login">
+        Remember your password?{' '}
+        <a href="auth/sign-in" onClick={(e) => { e.preventDefault(); router.push('/sign-in'); }}>
+          Sign in
+        </a>
+      </p>
       
       <section>
         <div className="container">
@@ -144,7 +145,6 @@ export default function NewPasswordPage() {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    //placeholder="Enter your new password"
                     required
                     minLength={8}
                     disabled={loading}
@@ -174,7 +174,6 @@ export default function NewPasswordPage() {
                     id="confirmPassword"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    //placeholder="Confirm your new password"
                     required
                     minLength={8}
                     disabled={loading}
@@ -197,5 +196,21 @@ export default function NewPasswordPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+// Composant principal qui enveloppe le formulaire avec Suspense
+export default function NewPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="auth-section">
+        <AuthHeader />
+        <div className="container">
+          
+        </div>
+      </div>
+    }>
+      <NewPasswordForm />
+    </Suspense>
   );
 }

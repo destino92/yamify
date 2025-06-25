@@ -1,4 +1,3 @@
-import DashboardHeader from "@/app/dashboard/_components/DashboardHeader";
 import "@/styles/RightPanelDashboard.css";
 import "@/styles/DeployProject.css";
 import Image from "next/image";
@@ -17,11 +16,9 @@ import Notification from "@/components/Notification/Notification";
 
 type Props = {
   expandRightPanel: boolean;
-  setShowYamDialog: (Callback: boolean) => void;
-  setShowAiModal: (Callback: boolean) => void;
 };
 
-const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
+const DeployProject = ({ expandRightPanel }: Props) => {
   const [yam, setYam] = useState<SelectYam>();
   const [showAnimation, setShowAnimation] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +48,7 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
       }
     }
     getWorkspaces();
-  }, [slug]); // errorNotification retiré des dépendances
+  }, [slug]);
 
   console.log(error);
 
@@ -172,7 +169,6 @@ const DeployProject = ({ expandRightPanel, setShowAiModal }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader setShowAiModal={setShowAiModal} />
 
         {!loading && (
           <div className="section-deploy">
