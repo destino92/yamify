@@ -1,0 +1,136 @@
+/* FAQ Container */
+.faq-container {
+    min-height: 100vh;
+    color: white;
+    
+
+  }
+  
+  .faq-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  
+  /* FAQ Title */
+  .faq-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    color: white;
+    line-height: 1;
+  }
+  
+  /* FAQ List */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-right: 20px;
+    margin-top: 20px;
+  }
+  
+  /* FAQ Item */
+  .faq-item {
+    border: 1px solid var(--Default-Dark-Ash, #202020);
+    background: var(--Default-Light-Black, #141414);
+    border-radius: 0px;
+    overflow: hidden;
+    width: 100%;
+    padding-right: 20px;
+  }
+  
+  /* FAQ Question Button */
+  .faq-question-button {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .faq-question-button:hover {
+    background-color: #ad6d1f2e;
+  }
+  
+  .faq-question-button:focus {
+    outline: none;
+  }
+  
+  /* FAQ Question Text */
+  .faq-question-text {
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    padding-right: 1rem;
+    flex: 1;
+  }
+  
+  /* FAQ Icon */
+  .faq-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #6b7280;
+    flex-shrink: 0;
+  }
+  
+  /* FAQ Answer Container */
+  .faq-answer-container {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .faq-answer-container.open {
+    max-height: 24rem;
+    opacity: 1;
+  }
+  
+  /* FAQ Answer Content */
+  .faq-answer-content {
+    padding: 1rem 1.5rem 1.25rem;
+    color: white;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    border-top: 1px solid #454547;
+  }
+  
+  .faq-answer-content p {
+    margin: 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .faq-wrapper {
+      padding: 2rem 1rem;
+    }
+    
+    .faq-title {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .faq-question-button {
+      padding: 1rem 1.25rem;
+    }
+    
+    .faq-answer-content {
+      padding: 0.875rem 1.25rem 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .faq-title {
+      font-size: 2rem;
+    }
+    
+    .faq-question-text {
+      font-size: 0.9rem;
+    }
+  }

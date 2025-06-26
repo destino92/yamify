@@ -1,6 +1,5 @@
 "use client";
 
-import DashboardHeader from "@/app/dashboard/_components/DashboardHeader";
 import Button from "@/components/Button/Button";
 import routes from "@/libs/routes";
 import "@/styles/RightPanelDashboard.css";
@@ -12,11 +11,9 @@ import Link from "next/link";
 // import { useState } from "react";
 
 type Props = {
-  expandRightPanel: boolean;
-  setShowAiModal: (Callback: boolean) => void;
-};
+  expandRightPanel: boolean;};
 
-const RightPanelProjects = ({ expandRightPanel, setShowAiModal }: Props) => {
+const RightPanelProjects = ({ expandRightPanel }: Props) => {
   // const [projectExists, setProjectExists] = useState(true);
 
   return (
@@ -27,7 +24,7 @@ const RightPanelProjects = ({ expandRightPanel, setShowAiModal }: Props) => {
     >
       <div className="dummy-panel"></div>
       <div className="main-panel">
-        <DashboardHeader setShowAiModal={setShowAiModal} />
+       
 
         {true ? (
           <div className="section-projects">

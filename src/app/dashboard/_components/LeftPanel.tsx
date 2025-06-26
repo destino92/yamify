@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "@/styles/LeftPanelDashboard.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,18 +27,68 @@ const LeftPanel = ({
   workspaces = [], // Default to empty array
 }: Props) => {
   const [selectedWorkspace, setSelectedWorkspace] =
-    useState<SelectWorkspace | null>(
-      workspaces.length > 0 ? workspaces[0] : null
-    );
+    useState<SelectWorkspace | null>(null);
   // const [collapseYam, setCollapseYam] = useState(true);
   const [dropDownWorkspace, setDropDownWorkspace] = useState(false);
   const { user } = useUser();
   const pathname = usePathname();
+  const leftPanelRef = useRef<HTMLDivElement>(null);
+  
+  // Fermer le menu déroulant au clic à l'extérieur
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (leftPanelRef.current && !leftPanelRef.current.contains(event.target as Node)) {
+        setDropDownWorkspace(false);
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  
+  // Fermer le panneau seulement lors d'un changement de route
+  // et non lors d'une interaction utilisateur directe avec le panneau
+  const prevPathRef = useRef(pathname);
+  
+  useEffect(() => {
+    // Ne fermer le panneau que lorsque la route change réellement
+    if (prevPathRef.current !== pathname) {
+      prevPathRef.current = pathname;
+      
+      if (!expandRightPanel) {
+        setExpandRightPanel(true);
+      }
+    }
+  }, [pathname, expandRightPanel, setExpandRightPanel]);
+  
+  // Initialiser le workspace sélectionné à partir du localStorage ou par défaut
+  useEffect(() => {
+    if (workspaces.length > 0) {
+      try {
+        const savedWorkspaceId = localStorage.getItem('selectedWorkspaceId');
+        
+        if (savedWorkspaceId) {
+          const savedWorkspace = workspaces.find(ws => ws.id === savedWorkspaceId);
+          if (savedWorkspace) {
+            setSelectedWorkspace(savedWorkspace);
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Error accessing localStorage:', error);
+      }
+      
+      // Fallback au premier workspace si rien n'est trouvé en localStorage
+      setSelectedWorkspace(workspaces[0]);
+    }
+  }, [workspaces]);
 
   if (!user) return null;
 
   return (
-    <div className={`left-panel ${expandRightPanel && "not-expand"}`}>
+    <div ref={leftPanelRef} className={`left-panel ${expandRightPanel && "not-expand"}`}>
       <div className="contain">
         <div className="head">
           <div className="logo">
@@ -57,7 +107,7 @@ const LeftPanel = ({
                   alt="Yamify Logo"
                   className="logo-img"
                   width={12}
-                  onClick={() => setExpandRightPanel(!expandRightPanel)}
+                  onClick={() => setExpandRightPanel(false)} // Ouvrir le panneau
                   style={{ cursor: "pointer" }}
                   height={15.2}
                 />
@@ -68,11 +118,11 @@ const LeftPanel = ({
 
           <Image
             src="/svgs/sidebar.svg"
-            alt=""
+            alt="Toggle Sidebar"
             className="side-bar"
             height={15}
             width={15}
-            onClick={() => setExpandRightPanel(!expandRightPanel)}
+            onClick={() => setExpandRightPanel(true)} // Réduire le panneau
           />
         </div>
 
@@ -128,7 +178,10 @@ const LeftPanel = ({
                         alt=""
                         width={15}
                         height={15}
-                        onClick={() => setDropDownWorkspace(!dropDownWorkspace)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDropDownWorkspace(false);
+                        }}
                       />
                     </div>
                   )}
@@ -141,7 +194,17 @@ const LeftPanel = ({
                       <div
                         className="workspace-row"
                         key={workspace.id}
-                        onClick={() => setSelectedWorkspace(workspace)}
+                        onClick={() => {
+                          setSelectedWorkspace(workspace);
+                          setDropDownWorkspace(false);
+                          
+                          // Sauvegarder la sélection dans localStorage
+                          try {
+                            localStorage.setItem('selectedWorkspaceId', workspace.id);
+                          } catch (error) {
+                            console.error('Error saving to localStorage:', error);
+                          }
+                        }}
                       >
                         <div className="wr">
                           <Image
@@ -183,6 +246,11 @@ const LeftPanel = ({
                   pathname ===
                     routes.dashboard.yams.single(selectedWorkspace.name, selectedWorkspace.id) && "active"
                 }`}
+                onClick={() => {
+                  // Fermer le panneau latéral lors de la navigation vers un Yam
+                  setExpandRightPanel(true);
+                  setDropDownWorkspace(false);
+                }}
               >
                 <Image src="/svgs/cluster.svg" alt="" width={15} height={15} />
                 <p>Yam</p>

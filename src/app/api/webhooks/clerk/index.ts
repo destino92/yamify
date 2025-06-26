@@ -44,7 +44,10 @@ export const completeOnboarding = async ({ workspaceName, createYam }: Onboardin
       name: namespace,
       userId: id,
     });
-    workspaceId = workspace.id;
+    if (!workspace.workspace) {
+      throw new Error(workspace.error || 'Failed to create workspace');
+    }
+    workspaceId = workspace.workspace.id;
     console.log('Workspace created for user:', workspace);
   } catch (e) {
     console.error('❌ Error creating workspace:', e);
