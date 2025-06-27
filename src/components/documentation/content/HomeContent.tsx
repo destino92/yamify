@@ -10,8 +10,8 @@ interface Props {
 
 const HomeContent: React.FC<Props> = ({ contentRef, lightMode, onTabChange }) => {
   return (
-    <div className="relative top-70  w-[80%] ">
-       <h1 className="text-2xl font-bold mb-8 text-white">Welcome!</h1>
+    <div className=" flex justify-center items-start w-[83%]  relative left-30">
+       <h1 className="text-2xl font-bold mb-8 text-white"></h1>
     <div ref={contentRef} className={`   py-12 ${lightMode ? "light-mode" : ""}`}>
      
       
@@ -40,7 +40,7 @@ const HomeContent: React.FC<Props> = ({ contentRef, lightMode, onTabChange }) =>
           <h2>Tutorials</h2>
           <p>Follow clear, hands-on guides to deploy apps, connect services, and manage your cloud. No technical background needed—just follow along and launch with ease.</p>
           <div className="  relative left-10">
-          <Button linkBtn={false} yellow={true} onClick={() => onTabChange("tutorial")} text="Watch Tutorials" />
+          <Button linkBtn={false} yellow={true} onClick={() => onTabChange("education")} text="Watch Tutorials" />
 
           </div>
         </div>

@@ -14,9 +14,9 @@ type Props = {
 
 const Herosection: React.FC<Props> = ({heroRef,lightMode}) => {
   return (
-    <div className={`hero-section ${lightMode && "light-mode"} absolute top-22`} ref={heroRef}>
+    <div className={`hero-section ${lightMode && "light-mode"} relative top-15`} ref={heroRef}>
         
-      <div className="   flex justify-center items-center ">
+      <div className="   flex justify-center  ">
       
         <div className="flex items-center  w-[80%] DocHero">
             <div className="flex  items-center  gap-6 textDoc  ">

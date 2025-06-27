@@ -21,6 +21,8 @@ export default function DocumentationLayout({
       <main className="flex-1">
         {children}
       </main>
+
+      
     </div>
   );
 }
