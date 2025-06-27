@@ -10,26 +10,26 @@ const categories = [
   {
     title: "Introduction",
     links: [
-      { text: "Tutorial: Getting started with Yamify.", href: "https://yamify.co" },
-      { text: "Tutorial: How to create a yam?", href: "https://yamify.co" },
+      { text: "Tutorial: Getting started with Yamify.", href: "https://doc.yamify.co" },
+      { text: "Tutorial: How to create a yam?", href: "https://doc.yamify.co" },
     ],
   },
   {
     title: "Infrastructure",
     links: [
-      { text: "What is Cloud Infrastructure?", href: "https://yamify.co" },
-      { text: "Why Kubernetes (and why Yamify hides it)?", href: "https://yamify.co" },
-      { text: "Understanding Yams (Your Cluster)", href: "https://yamify.co" },
+      { text: "What is Cloud Infrastructure?", href: "https://doc.yamify.co" },
+      { text: "Why Kubernetes (and why Yamify hides it)?", href: "https://doc.yamify.co" },
+      { text: "Understanding Yams (Your Cluster)", href: "https://doc.yamify.co" },
     ],
   },
   {
     title: "Features",
     links: [
-      { text: "Workspaces, Groups, and Apps — Made Simple", href: "https://yamify.co" },
-      { text: "How Deployments Work on Yamify", href: "https://yamify.co" },
-      { text: "Understanding Billing and Credits", href: "https://yamify.co" },
-      { text: "Growing From Frontend to Full-Stack with Yamify", href: "https://yamify.co" },
-      { text: "Common Infrastructure Terms (Without the Jargon)", href: "https://yamify.co" },
+      { text: "Workspaces, Groups, and Apps — Made Simple", href: "https://doc.yamify.co" },
+      { text: "How Deployments Work on Yamify", href: "https://doc.yamify.co" },
+      { text: "Understanding Billing and Credits", href: "https://doc.yamify.co" },
+      { text: "Growing From Frontend to Full-Stack with Yamify", href: "https://doc.yamify.co" },
+      { text: "Common Infrastructure Terms (Without the Jargon)", href: "https://doc.yamify.co" },
     ],
   },
 ];
