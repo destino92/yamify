@@ -330,7 +330,7 @@ const AiChatModal = ({ setShowAiModal }: Props) => {
     <div className="ai-chat-modal">
       <div className="ai-chat-system">
         <div className="history">
-          <div className="head">
+          <div className="head-ai">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="15"

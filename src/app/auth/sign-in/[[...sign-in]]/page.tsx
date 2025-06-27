@@ -5,8 +5,8 @@ import AuthHeader from "../../_components/AuthHeader";
 import "@/styles/AuthPage.css";
 import Image from "next/image";
 import Link from "next/link";
-import { OAuthStrategy } from '@clerk/types'
-import { useSignIn } from '@clerk/nextjs'
+import { OAuthStrategy } from "@clerk/types";
+import { useSignIn } from "@clerk/nextjs";
 import { toast } from "sonner";
 import Notification from "@/components/Notification/Notification";
 import { useRouter } from "next/navigation";
@@ -14,75 +14,82 @@ import { useRouter } from "next/navigation";
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const { isLoaded, signIn, setActive } = useSignIn();
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const router = useRouter()
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const router = useRouter();
 
-  if (!signIn) return null
+  if (!signIn) return null;
 
   // Handle the submission of the sign-in form
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!isLoaded) return
+    if (!isLoaded) return;
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
       // Start the sign-in process using the email and password provided
       const signInAttempt = await signIn.create({
         identifier: email,
         password,
-      })
+      });
 
       // If sign-in process is complete, set the created session as active
       // and redirect the user
-      if (signInAttempt.status === 'complete') {
-        await setActive({ session: signInAttempt.createdSessionId })
-        router.push('/')
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+        router.push("/");
       } else {
         // If the status is not complete, check why. User may need to
         // complete further steps.
-        console.error(JSON.stringify(signInAttempt, null, 2))
-        toast.custom(() => <Notification
-          variant="error"
-          title="Sign In Failed"
-          description="Please check your email and password, or try signing in with a different method."
-        />)
+        console.error(JSON.stringify(signInAttempt, null, 2));
+        toast.custom(() => (
+          <Notification
+            variant="error"
+            title="Sign In Failed"
+            description="Please check your email and password, or try signing in with a different method."
+          />
+        ));
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error('Error:', JSON.stringify(err, null, 2))
-      toast.custom(() => <Notification
-        variant="error"
-        title="Sign In Error"
-        description={err.errors?.[0]?.message || 'An unexpected error occurred. Please try again.'}
-      />)
+      console.error("Error:", JSON.stringify(err, null, 2));
+      toast.custom(() => (
+        <Notification
+          variant="error"
+          title="Sign In Error"
+          description={
+            err.errors?.[0]?.message ||
+            "An unexpected error occurred. Please try again."
+          }
+        />
+      ));
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const signInWithSocial = (strategy: OAuthStrategy) => {
     return signIn
       .authenticateWithRedirect({
         strategy,
-        redirectUrl: '/auth/sign-in/sso-callback',
-        redirectUrlComplete: '/dashboard',
+        redirectUrl: "/auth/sign-in/sso-callback",
+        redirectUrlComplete: "/dashboard",
       })
       .then((res) => {
-        console.log(res)
+        console.log(res);
       })
       .catch((err) => {
         // See https://clerk.com/docs/custom-flows/error-handling
         // for more info on error handling
-        console.log(err.errors)
-        console.error(err, null, 2)
-      })
-  }
+        console.log(err.errors);
+        console.error(err, null, 2);
+      });
+  };
 
   return (
     <div className="auth-section">
@@ -92,11 +99,17 @@ export default function SignIn() {
           <h1>Sign in</h1>
 
           <div className="auth-btns">
-            <div className="btn" onClick={() => signInWithSocial('oauth_github')}>
+            <div
+              className="auth-btn"
+              onClick={() => signInWithSocial("oauth_github")}
+            >
               <Image src="/svgs/mdi_github.svg" alt="" height={20} width={20} />
               Continue with GitHub
             </div>
-            <div className="btn" onClick={() => signInWithSocial('oauth_github')}>
+            <div
+              className="auth-btn"
+              onClick={() => signInWithSocial("oauth_github")}
+            >
               <Image src="/svgs/google.svg" alt="" height={20} width={20} />
               Continue with Google
             </div>
@@ -151,10 +164,15 @@ export default function SignIn() {
               </div>
             </div>
 
-            <button type="submit" disabled={isSubmitting || !email || !password}>
+            <button
+              type="submit"
+              disabled={isSubmitting || !email || !password}
+            >
               <div className="contain">
                 <span>{isSubmitting ? "Loading ..." : "Sign in"}</span>
-                <span className="hover-text">{isSubmitting ? "Loading ..." : "Sign in"}</span>
+                <span className="hover-text">
+                  {isSubmitting ? "Loading ..." : "Sign in"}
+                </span>
               </div>
             </button>
           </form>

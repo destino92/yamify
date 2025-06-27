@@ -92,10 +92,10 @@ const Header = ({ heroRef, featuresRef }: Props) => {
         </Link>
 
         <nav>
-          <div className="nav-link" onClick={handleScrollToWork}>
+          <Link href="/" className="nav-link">
             <span>Home</span>
             <span className="hover-text">Home</span>
-          </div>
+          </Link>
           <div
             className="feature-link"
             onMouseEnter={() => setIsHovered(true)}
@@ -160,19 +160,19 @@ const Header = ({ heroRef, featuresRef }: Props) => {
                         fill="#DD9A38"
                       />
                     </svg>
-                    <Link href="#" className="nav-link">
+                    {/* <Link href="#" className="nav-link">
                       <span>Blog</span>
                       <span className="hover-text">Blog</span>
-                    </Link>
-                    <Link href="#" className="nav-link">
+                    </Link> */}
+                    {/* <Link href="#" className="nav-link">
                       <span>Community</span>
                       <span className="hover-text">Community</span>
-                    </Link>
-                    <Link href="#" className="nav-link">
+                    </Link> */}
+                    <Link href={routes.docs} className="nav-link">
                       <span>Docs</span>
                       <span className="hover-text">Docs</span>
                     </Link>
-                    <Link href="#" className="nav-link">
+                    <Link href={routes.techSupport} className="nav-link">
                       <span>Technical Support</span>
                       <span className="hover-text">Technical Support</span>
                     </Link>

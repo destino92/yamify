@@ -91,7 +91,7 @@ header section nav .feature-link .resources-container {
   flex-direction: column;
   padding: 50px 30px 40px 30px;
   align-items: flex-start;
-  width: 183px;
+  width: 193px;
   gap: 20px;
   position: absolute;
   top: 50px;
@@ -298,20 +298,14 @@ header section .action-btns .modes .btn-mode.dark {
     display: block;
   }
   header section .logo {
-    position:absolute;
-    top:-40px;
     display: flex;
     align-items: center;
     gap: 15px;
     padding-left: 0;
-   
-  
   }
   header section .logo .logo-img {
     width: 15px;
     height: 19px;
-   
-   
   }
   header section .logo h1 {
     font-family: "Commissioner", sans-serif;

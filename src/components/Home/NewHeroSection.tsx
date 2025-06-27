@@ -15,19 +15,14 @@ const NewHeroSection = ({ setJoinWaitlistModal, heroRef }: Props) => {
   return (
     <div className="new-hero-section" ref={heroRef}>
       <section>
-        <ActionTexts
+        {/* <ActionTexts
           lightMode={false}
           tagContents={["Local.", "Fast.", "Reliable."]}
-        />
+        /> */}
 
         <div className="content-container">
-          <h2>Where Your Data Lives and Stays</h2>
-          <p>
-            Yamify is a local cloud platform made for developers who want speed,
-            reliability, and control. Your apps run on secure, local
-            infrastructure—so your data stays nearby, your costs stay low, and
-            your setup is always in your hands.
-          </p>
+          <h2>Your AI Workspace in Africa</h2>
+          <p>Launch Jupyter, AI tools, Storage and WordPress in 1 click.</p>
           <div className="btns-wrap">
             <Button
               text="Join Waitlist Now"

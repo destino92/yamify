@@ -7,6 +7,8 @@ const isPublicRoute = createRouteMatcher([
   "/auth/sign-up(.*)",
   "/auth/reset-password(.*)",
   "/auth/new-password(.*)",
+  "/docs(.*)",
+  "/technical-support(.*)",
 ]);
 const isOnboardingRoute = createRouteMatcher(["/auth/onboarding"]);
 
@@ -28,7 +30,7 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   // Don't redirect if user is on SSO callback routes - they need to complete OAuth
-  if (req.nextUrl.pathname.includes('/sso-callback')) {
+  if (req.nextUrl.pathname.includes("/sso-callback")) {
     return NextResponse.next();
   }
 

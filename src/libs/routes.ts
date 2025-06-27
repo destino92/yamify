@@ -8,13 +8,16 @@ const routes = {
     payment: "/auth/payment",
   },
   contactUs: "/contact-us",
+  docs: "/docs",
+  techSupport: "/technical-support",
   dashboard: {
     overview: "/dashboard",
     yams: {
       all: (dashboardId: string) => `/dashboard/yams/${dashboardId}/all`,
       single: (name: string, dashboardId: string) =>
         `/dashboard/yams/${dashboardId}/${name}`,
-      deployProject: (name: string, dashboardId: string) => `/dashboard/yams/${dashboardId}/${name}/deploy-project`
+      deployProject: (name: string, dashboardId: string) =>
+        `/dashboard/yams/${dashboardId}/${name}/deploy-project`,
     },
     projects: {
       // all: "/dashboard/projects/all",

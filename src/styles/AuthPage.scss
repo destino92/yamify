@@ -1,3 +1,5 @@
+@import "variables";
+
 .auth-section {
   width: 100%;
   height: 100vh;
@@ -19,7 +21,7 @@
       top: 0;
       left: 50%;
       transform: translateX(-50%);
-      background: #1b1b1b;
+      background: $defualt-black;
 
       .logo {
         display: flex;
@@ -87,7 +89,7 @@
         margin-bottom: 24px;
         font-family: "Commissioner", sans-serif;
 
-        .btn {
+        .auth-btn {
           display: flex;
           height: 40px;
           padding: 15px;
