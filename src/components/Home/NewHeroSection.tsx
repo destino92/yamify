@@ -1,5 +1,5 @@
 import "@/styles/NewHeroSection.css";
-import ActionTexts from "./ActionTexts";
+// import ActionTexts from "./ActionTexts";
 import Button from "../Button/Button";
 import routes from "@/libs/routes";
 import Image from "next/image";
