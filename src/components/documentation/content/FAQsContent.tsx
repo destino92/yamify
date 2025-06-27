@@ -38,7 +38,7 @@ const FAQsContent: React.FC<Props> = ({ contentRef }) => {
   ];
 
   return (
-    <div className="faq-container     w-full  relative top-50" ref={contentRef}>
+    <div className="    w-full  " ref={contentRef}>
       <div className="faq-wrapper w-[88%]">
         <h1 className="text-2xl font-bold mb-8 text-white">FAQ</h1>
         

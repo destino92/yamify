@@ -25,7 +25,7 @@ const navItems: NavItem[] = [
 
 const Navbar: React.FC<Props> = ({ navRef, lightMode, activeTab, onTabChange }) => {
   return (
-    <div className={`${lightMode && "light-mode"} hero-section  relative top-70`} ref={navRef}>
+    <div className={`${lightMode && "light-mode"} hero-section  relative -top-95`} ref={navRef}>
       <div className="flex justify-center items-center">
         <div className="flex items-center justify-between w-[80%] DocNavbar z-50 py-4">
           {/* Navigation Items */}

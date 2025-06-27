@@ -33,14 +33,16 @@ const DocumentationPage: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "faqs":
-        return <div className="relative   "> <FAQsContent contentRef={contentRef}  /></div>;
+        return <div className="  w-full  relative -top-90  "> <FAQsContent contentRef={contentRef}  /></div>;
       case "education":
-        return <div className="relative top-60  flex   "> <h1 className="text-2xl font-bold mb-8 text-white relative left-30">Education</h1><EducationContent contentRef={contentRef} lightMode={lightMode} /></div>;
+        return <div className="  w-full  relative -top-90 "> <h1 className="text-2xl font-bold mb-8 text-white relative left-30">Education</h1><EducationContent contentRef={contentRef} lightMode={lightMode} /></div>;
       case "tutorial":
-        return <div className="relative top-40   "><TutorialContent contentRef={contentRef} lightMode={lightMode} /></div>;
+        return <div className=" w-full  relative -top-90  "><TutorialContent contentRef={contentRef} lightMode={lightMode} /></div>;
       default:
         return (
-            <div className=" w-[80%]  flex justify-center items-center ">
+            <div className=" w-full  relative -top-90">
+                    <h1 className="text-2xl font-bold mb-8 text-white relative left-25">Welcome!</h1>
+
           <HomeContent 
             contentRef={contentRef} 
             lightMode={lightMode} 
@@ -52,7 +54,7 @@ const DocumentationPage: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen `}>
+    <div className={`min-h-screen  relative -top-90`}>
       {/* Hero Section */}
       <Herosection heroRef={heroRef} lightMode={lightMode} />
       
@@ -71,8 +73,8 @@ const DocumentationPage: React.FC = () => {
       
       {/* Bouton pour basculer le mode (optionnel pour les tests) */}
 
-      <div className=" relative top-50  pt-32">
-        <div className="h-56"> </div>
+      <div className="  ">
+        <div className="h-56 "> </div>
       <ReadyToBuild setJoinWaitlistModal={setJoinWaitlistModal} />
 
       <Footer
