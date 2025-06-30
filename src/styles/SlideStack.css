@@ -49,7 +49,6 @@
   width: -moz-fit-content;
   width: fit-content;
   gap: 10px;
-  border: 1px solid var(--Default-Dark-Ash, #202020);
   white-space: nowrap;
   min-width: 0;
 }

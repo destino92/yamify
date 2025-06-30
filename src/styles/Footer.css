@@ -204,6 +204,7 @@ footer section .container-footer .right .content p {
   font-size: 14px;
   line-height: 17px;
   color: #e6e6e6;
+  width: 300px;
 }
 footer section .bottom {
   display: flex;

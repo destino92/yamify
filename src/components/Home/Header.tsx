@@ -168,7 +168,11 @@ const Header = ({ heroRef, featuresRef }: Props) => {
                       <span>Community</span>
                       <span className="hover-text">Community</span>
                     </Link> */}
-                    <Link href={routes.docs} className="nav-link">
+                    <Link
+                      href="https://doc.yamify.co"
+                      target="_blank"
+                      className="nav-link"
+                    >
                       <span>Docs</span>
                       <span className="hover-text">Docs</span>
                     </Link>

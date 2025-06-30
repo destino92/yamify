@@ -39,7 +39,6 @@ header.light-mode.scrolled {
           backdrop-filter: blur(8px);
 }
 header.scrolled {
-  background: #202020;
   -webkit-backdrop-filter: blur(8px);
           backdrop-filter: blur(8px);
 }
