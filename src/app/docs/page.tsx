@@ -11,17 +11,16 @@ import TutorialContent from "@/components/documentation/content/TutorialContent"
 import ReadyToBuild from "@/components/Home/ReadyToBuild";
 import Footer from "@/components/Home/Footer";
 
-
 const DocumentationPage: React.FC = () => {
   const heroRef = useRef<HTMLDivElement | null>(null);
   const navRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const featuresRef = useRef<HTMLDivElement | null>(null);
   const contactRef = useRef<HTMLDivElement | null>(null);
-  
+
   // État pour gérer l'onglet actif et le mode clair/sombre
   const [activeTab, setActiveTab] = useState<string>("home");
-  const [lightMode,] = useState<boolean>(false);
+  const [lightMode] = useState<boolean>(false);
   const [, setJoinWaitlistModal] = useState(false);
 
   // Fonction pour changer d'onglet
@@ -33,21 +32,40 @@ const DocumentationPage: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "faqs":
-        return <div className="  w-full  relative -top-90  "> <FAQsContent contentRef={contentRef}  /></div>;
+        return (
+          <div className="  w-full  relative -top-90  ">
+            {" "}
+            <FAQsContent contentRef={contentRef} />
+          </div>
+        );
       case "education":
-        return <div className="  w-full  relative -top-90 "> <h1 className="text-2xl font-bold mb-8 text-white relative left-30">Education</h1><EducationContent contentRef={contentRef} lightMode={lightMode} /></div>;
+        return (
+          <div className="  w-full  relative -top-90 ">
+            {" "}
+            <h1 className="text-2xl font-bold mb-8 text-white relative left-30">
+              Education
+            </h1>
+            <EducationContent contentRef={contentRef} lightMode={lightMode} />
+          </div>
+        );
       case "tutorial":
-        return <div className=" w-full  relative -top-90  "><TutorialContent contentRef={contentRef} lightMode={lightMode} /></div>;
+        return (
+          <div className=" w-full  relative -top-90  ">
+            <TutorialContent contentRef={contentRef} lightMode={lightMode} />
+          </div>
+        );
       default:
         return (
-            <div className=" w-full  relative -top-90">
-                    <h1 className="text-2xl font-bold mb-8 text-white relative left-25">Welcome!</h1>
+          <div className=" w-full  relative -top-90">
+            <h1 className="text-2xl font-bold mb-8 text-white relative left-25">
+              Welcome!
+            </h1>
 
-          <HomeContent 
-            contentRef={contentRef} 
-            lightMode={lightMode} 
-            onTabChange={handleTabChange}
-          />
+            <HomeContent
+              contentRef={contentRef}
+              lightMode={lightMode}
+              onTabChange={handleTabChange}
+            />
           </div>
         );
     }
@@ -57,38 +75,36 @@ const DocumentationPage: React.FC = () => {
     <div className={`min-h-screen  relative -top-90`}>
       {/* Hero Section */}
       <Herosection heroRef={heroRef} lightMode={lightMode} />
-      
+
       {/* Navigation Bar */}
-      <Navbar 
-        navRef={navRef} 
-        lightMode={lightMode} 
+      <Navbar
+        navRef={navRef}
+        lightMode={lightMode}
         activeTab={activeTab}
         onTabChange={handleTabChange}
       />
-      
-      <div className="content-wrapper">
-  {renderContent()}
-</div>
+
+      <div className="content-wrapper">{renderContent()}</div>
       {/* Content dynamique */}
-      
+
       {/* Bouton pour basculer le mode (optionnel pour les tests) */}
 
       <div className="  ">
         <div className="h-56 "> </div>
-      <ReadyToBuild setJoinWaitlistModal={setJoinWaitlistModal} />
+        <ReadyToBuild setJoinWaitlistModal={setJoinWaitlistModal} />
 
-      <Footer
-  featuresRef={featuresRef}
-  contactRef={contactRef}
-  heroRef={heroRef}
-  // capabilityRef={capabilityRef}
-/>
+        <Footer
+          featuresRef={featuresRef}
+          contactRef={contactRef}
+          heroRef={heroRef}
+          // capabilityRef={capabilityRef}
+        />
       </div>
 
-{/* <HeroSection heroRef={heroRef} lightMode={lightMode} /> */}
+      {/* <HeroSection heroRef={heroRef} lightMode={lightMode} /> */}
 
-{/* <button onClick={handleClick}>Afficher une notification</button> */}
-{/* <div className="section-containers">
+      {/* <button onClick={handleClick}>Afficher une notification</button> */}
+      {/* <div className="section-containers">
   <WhatIfSection workIfRef={workIfRef} lightMode={lightMode} />
   <CapabilitySection
     capabilityRef={capabilityRef}
@@ -101,8 +117,6 @@ const DocumentationPage: React.FC = () => {
     lightMode={lightMode}
   />
 </div> */}
-
-
     </div>
   );
 };

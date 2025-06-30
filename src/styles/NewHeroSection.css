@@ -21,10 +21,10 @@
 .new-hero-section section .content-container h2 {
   text-align: center;
   font-family: "PT Mono", Arial;
-  font-size: 24px;
+  color: var(--Default-Light-grey, #e6e6e6);
+  font-size: 40px;
   font-weight: 700;
   line-height: 100%;
-  color: var(--Default-Light-grey, #e6e6e6);
 }
 .new-hero-section section .content-container p {
   font-family: "Commissioner", sans-serif;
@@ -47,6 +47,10 @@
   align-self: center;
   margin-top: 63px;
   position: relative;
+  border: 2px solid;
+  border-image-source: linear-gradient(310.99deg, #dd9a38 6.08%, #bdfffb 98.46%);
+  border-image-slice: 1;
+  border: 2px solid;
 }
 .new-hero-section section .drop-img img.backdrop {
   position: absolute;

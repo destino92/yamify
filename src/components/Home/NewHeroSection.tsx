@@ -22,7 +22,10 @@ const NewHeroSection = ({ setJoinWaitlistModal, heroRef }: Props) => {
 
         <div className="content-container">
           <h2>Your AI Workspace in Africa</h2>
-          <p>Launch Jupyter, AI tools, Storage and WordPress in 1 click.</p>
+          <p>
+            Launch Jupyter, AI tools, Storage and Wordpress -- <br />
+            all in one click. No DevOps, no complex setup. Just build
+          </p>
           <div className="btns-wrap">
             <Button
               text="Join Waitlist Now"
@@ -38,7 +41,7 @@ const NewHeroSection = ({ setJoinWaitlistModal, heroRef }: Props) => {
           <SlideStacks />
           <Image
             className="backdrop"
-            src="/svgs/yam_dashboard.svg"
+            src="/images/yam_dashboard.png"
             alt=""
             width={880}
             height={578.947}
