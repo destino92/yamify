@@ -119,20 +119,20 @@ const Footer = ({ featuresRef, contactRef, heroRef }: FooterProps) => {
                     <path
                       d="M10.5 5.5C11.4946 5.5 12.4484 5.89509 13.1517 6.59835C13.8549 7.30161 14.25 8.25544 14.25 9.25V13.625H11.75V9.25C11.75 8.91848 11.6183 8.60054 11.3839 8.36612C11.1495 8.1317 10.8315 8 10.5 8C10.1685 8 9.85054 8.1317 9.61612 8.36612C9.3817 8.60054 9.25 8.91848 9.25 9.25V13.625H6.75V9.25C6.75 8.25544 7.14509 7.30161 7.84835 6.59835C8.55161 5.89509 9.50544 5.5 10.5 5.5Z"
                       stroke="#F8F8F8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M4.25 6.125H1.75V13.625H4.25V6.125Z"
                       stroke="#F8F8F8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M3 4.25C3.69036 4.25 4.25 3.69036 4.25 3C4.25 2.30964 3.69036 1.75 3 1.75C2.30964 1.75 1.75 2.30964 1.75 3C1.75 3.69036 2.30964 4.25 3 4.25Z"
                       stroke="#F8F8F8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </Link>

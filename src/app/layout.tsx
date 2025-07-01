@@ -1,17 +1,15 @@
-// Fichier : app/layout.tsx
 "use client";
 
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import Script from 'next/script';
+import Script from "next/script";
 import "./globals.css";
 import "@/styles/PageTransition.css";
-// 1. Importez le composant DatadogRumInitializer
-import DatadogRumInitializer from '@/components/DatadogRumInitializer';
+import DatadogRumInitializer from "@/components/DatadogRumInitializer";
 import CreateAnimation from "@/components/Home/CreateAnimation";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,29 +29,23 @@ export default function RootLayout({
   const pathname = usePathname();
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
   const [prevPathname, setPrevPathname] = useState("");
-  
-  // Messages à afficher pendant les transitions de page
-  const loadingTxts = [
-  "Loading your content...",
-   ];
+
+  const loadingTxts = ["Loading your content..."];
 
   useEffect(() => {
-    // Si c'est la première fois que le composant est monté, ne pas afficher l'animation
     if (prevPathname === "") {
       setPrevPathname(pathname);
       return;
     }
-    
-    // Si le chemin a changé, déclencher l'animation
+
     if (pathname !== prevPathname) {
       setIsPageTransitioning(true);
-      
-      // Simuler un temps de chargement (vous pouvez ajuster ce délai)
+
       const timer = setTimeout(() => {
         setIsPageTransitioning(false);
         setPrevPathname(pathname);
-      }, 5000); // 2 secondes d'animation
-      
+      }, 5000);
+
       return () => clearTimeout(timer);
     }
   }, [pathname, prevPathname]);
@@ -62,16 +54,38 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          // 2. Correction ici : utilisez .className au lieu de .variable
-          // pour appliquer les classes CSS générées par Next.js Font.
           className={`${geistSans.className} ${geistMono.className} antialiased`}
         >
-          {/* 3. Placez le composant DatadogRumInitializer ici, à l'intérieur du <body> */}
+          {/* Google Tag Manager */}
+          <Script id="gtm-script" strategy="afterInteractive">
+            {`
+              (function(w,d,s,l,i){
+                w[l]=w[l]||[];
+                w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+                var f=d.getElementsByTagName(s)[0],
+                    j=d.createElement(s),
+                    dl=l!='dataLayer'?'&l='+l:'';
+                j.async=true;
+                j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+                f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-WL9HFFB7');
+            `}
+          </Script>
+
+          <noscript
+            dangerouslySetInnerHTML={{
+              __html: `
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WL9HFFB7"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+              `,
+            }}
+          />
+
           <DatadogRumInitializer />
           <Toaster position="top-right" />
-          {/* Animation de transition entre les pages */}
+
           {isPageTransitioning ? (
-            <div className="page-transition-overlay ">
+            <div className="page-transition-overlay">
               <CreateAnimation
                 successBool={true}
                 barColor="#BDFFFB"
@@ -79,9 +93,21 @@ export default function RootLayout({
                 title=""
               />
             </div>
-          ) : children}
-          <Script type="text/javascript" id="hs-script-loader" async defer src="//js-eu1.hs-scripts.com/146340379.js" />
-          <Script async src="https://www.googletagmanager.com/gtag/js?id=G-HFCV4YMZ3D"></Script>
+          ) : (
+            children
+          )}
+
+          <Script
+            type="text/javascript"
+            id="hs-script-loader"
+            async
+            defer
+            src="//js-eu1.hs-scripts.com/146340379.js"
+          />
+          <Script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-HFCV4YMZ3D"
+          />
           <Script id="gtag-init" strategy="afterInteractive">
             {`
               window.dataLayer = window.dataLayer || [];
