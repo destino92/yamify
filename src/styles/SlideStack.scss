@@ -67,4 +67,40 @@
       }
     }
   }
+
+  @media (max-width: 575px) {
+    & {
+      h3 {
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 100%;
+        text-align: center;
+      }
+
+      .slide-stack {
+        // width: fit-content;
+        align-items: center;
+        display: flex;
+        justify-content: flex-start;
+        height: 34px;
+        opacity: 0.8;
+
+        .item {
+          display: flex;
+          padding: 9px 18px;
+          gap: 10px;
+
+          img {
+            width: 16px;
+            height: 16px;
+          }
+
+          p {
+            font-weight: 700;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
 }

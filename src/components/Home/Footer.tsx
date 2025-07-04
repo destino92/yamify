@@ -25,7 +25,11 @@ const Footer = ({ featuresRef, contactRef, heroRef }: FooterProps) => {
                 <span>Blog</span>
                 <span className="hover-text">Blog</span>
               </Link> */}
-              <Link href={routes.docs} className="nav-link">
+              <Link
+                href="https://doc.yamify.co"
+                target="_blank"
+                className="nav-link"
+              >
                 <span>Docs</span>
                 <span className="hover-text">Docs</span>
               </Link>
@@ -56,7 +60,10 @@ const Footer = ({ featuresRef, contactRef, heroRef }: FooterProps) => {
                 width={30}
                 height={38}
               />
-              <p>Launch Jupyter, AI tools, Storage and WordPress in 1 click.</p>
+              <p>
+                No dev team? No problem. Yamify lets you launch and run AI tools
+                while saving 60% on setup and maintenance costs.
+              </p>
             </div>
 
             <div className="social-container">

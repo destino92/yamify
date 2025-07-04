@@ -40,6 +40,9 @@
     padding-left: 14px;
     padding-right: 14px;
   }
+  .home .ai_logo_fixed {
+    display: none;
+  }
 }
 @media (min-width: 992px) and (max-width: 1102px) {
   .home .section-containers {

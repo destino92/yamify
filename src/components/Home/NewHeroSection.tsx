@@ -21,10 +21,12 @@ const NewHeroSection = ({ setJoinWaitlistModal, heroRef }: Props) => {
         /> */}
 
         <div className="content-container">
-          <h2>Your AI Workspace in Africa</h2>
+          <h2>
+            Launch AI Assistant in Africa with 60% Lower Infrastructure Costs.
+          </h2>
           <p>
-            Launch Jupyter, AI tools, Storage and Wordpress -- <br />
-            all in one click. No DevOps, no complex setup. Just build
+            No dev team? No problem. Yamify lets you launch and run AI tools
+            while saving 60% on setup and maintenance costs
           </p>
           <div className="btns-wrap">
             <Button
