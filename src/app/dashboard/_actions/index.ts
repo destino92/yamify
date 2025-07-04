@@ -5,6 +5,61 @@ import { yamModule } from '@/server/module/yam.module';
 import { workspaceModule } from '@/server/module/workspace.module';
 import { projectModule } from '@/server/module/project.module';
 import prisma from '@/libs/prisma';
+import { z } from 'zod';
+
+// Validation schemas
+const createYamSchema = z.object({
+  workspace: z.string().min(1, 'Workspace name is required'),
+  workspaceId: z.string().min(1, 'Workspace ID is required'),
+  yam: z.string().min(1, 'Yam name is required'),
+});
+
+const createWorkspaceSchema = z.object({
+  namespace: z.string().min(1, 'Namespace is required'),
+  createYam: z.boolean(),
+});
+
+const deployProjectSchema = z.object({
+  name: z.string().min(1, 'Project name is required'),
+  namespace: z.string().min(1, 'Namespace is required'),
+  yamId: z.string().min(1, 'Yam ID is required'),
+  workspaceId: z.string().min(1, 'Workspace ID is required'),
+});
+
+// Error types
+export type ActionResult<T = unknown> = {
+  success: boolean;
+  data?: T;
+  error?: string;
+  code?: string;
+};
+
+// Helper function for consistent error handling
+const handleActionError = (error: unknown, context: string): ActionResult => {
+  console.error(`${context} error:`, error);
+  
+  if (error instanceof z.ZodError) {
+    return {
+      success: false,
+      error: error.errors[0]?.message || 'Validation failed',
+      code: 'VALIDATION_ERROR'
+    };
+  }
+  
+  if (error instanceof Error) {
+    return {
+      success: false,
+      error: error.message,
+      code: 'OPERATION_FAILED'
+    };
+  }
+  
+  return {
+    success: false,
+    error: 'An unexpected error occurred',
+    code: 'UNKNOWN_ERROR'
+  };
+};
 
 interface CreateYamData {
   workspace: string;
@@ -12,27 +67,37 @@ interface CreateYamData {
   yam: string;
 }
 
-export const createYamAction = async ({workspace, workspaceId, yam}: CreateYamData) => {
+export const createYamAction = async (data: CreateYamData): Promise<ActionResult> => {
   const { userId } = await auth()
   const user = await currentUser()
 
   if (!user || !userId) {
-    return { message: 'No Logged In User' }
+    return {
+      success: false,
+      error: 'Authentication required',
+      code: 'UNAUTHORIZED'
+    };
   }
 
   try {
+
+    // Validate input
+    const validatedData = createYamSchema.parse(data);
+    const { workspace, workspaceId, yam } = validatedData;
+
     const createYam = await yamModule.service.createAndStoreVCluster(yam, 
       workspace,
       workspaceId
     )
+
     console.log('Yam created for workspace', createYam)
 
-  } catch(e) {
-    console.log(e)
-    if(e instanceof Error){
-      console.log(e.message)
-    }
-    return new Response('Error creating yam', { status: 500 })
+    return {
+      success: true,
+      data: createYam
+    };
+  } catch(error) {
+    return handleActionError(error, 'createYamAction');
   }
 }
 
@@ -41,58 +106,67 @@ interface CreateWorkspaceData {
   createYam: boolean;
 }
 
-export const createWorkspaceAction = async ({namespace, createYam}: CreateWorkspaceData) => {
+export const createWorkspaceAction = async (data: CreateWorkspaceData): Promise<ActionResult> => {
   const { userId } = await auth()
   const user = await currentUser()
 
   if (!user || !userId) {
-    return { error: 'No Logged In User', code: 'UNAUTHORIZED' }
+    return {
+      success: false,
+      error: 'Authentication required',
+      code: 'UNAUTHORIZED'
+    };
   }
 
   const { id } = user
   let workspaceId
-
+  
   try {
+    // Validate input
+    const validatedData = createWorkspaceSchema.parse(data);
+
     const result = await workspaceModule.service.create({
-      name: namespace,
+      name: validatedData.namespace,
       userId: id,
     })
     
     if (result.error) {
       return {
-        error: result.error,
-        code: result.code
-      }
+        success: false,
+        error: result.error || 'Failed to create workspace',
+        code: result.code || 'WORKSPACE_CREATION_FAILED'
+      };
     }
 
     console.log('Workspace created for user', result.workspace)
     workspaceId = result?.workspace?.id
-  } catch(e) {
-    console.error('Unexpected error creating workspace:', e)
-    return { 
-      error: 'An unexpected error occurred while creating workspace', 
-      code: 'WORKSPACE_CREATION_FAILED' 
-    }
-  }
 
-  if(createYam && workspaceId){
-    try {
-      const yam = await yamModule.service.createAndStoreVCluster(namespace, 
-        namespace,
-        workspaceId
-      )
-      console.log('Yam created for workspace', yam)
-    } catch(e) {
-      console.error('Error creating yam:', e)
-      // Don't fail the entire onboarding if yam creation fails
-      // The user can create it later from the dashboard
-      console.warn('Yam creation failed, but continuing with onboarding')
+    if(validatedData.createYam && workspaceId){
+      try {
+        const yam = await yamModule.service.createAndStoreVCluster(
+          validatedData.namespace,
+          validatedData.namespace,
+          workspaceId
+        )
+        console.log('Yam created for workspace', yam)
+      } catch(e) {
+        console.error('Error creating yam (non-blocking):', e)
+        // Don't fail the entire onboarding if yam creation fails
+        // The user can create it later from the dashboard
+        console.warn('Yam creation failed, but continuing with onboarding')
+      }
     }
-  }
 
-  return { 
-    success: true,
-    message: 'Onboarding completed successfully'
+    return {
+      success: true,
+      data: {
+        workspace: result.workspace,
+        message: 'Onboarding completed successfully'
+      }
+    };
+
+  } catch(error) {
+    return handleActionError(error, 'createWorkspaceAction');
   }
 }
 
@@ -103,130 +177,166 @@ interface DeployProject {
   workspaceId: string;
 }
 
-export const deployCodeServerProjectAction = async ({name, namespace, yamId, workspaceId}: DeployProject) => {
-  const { userId } = await auth()
-  const user = await currentUser()
-
-  if (!user || !userId) {
-    return { error: 'No Logged In User' }
-  }
-  
-  // Vérifier la limite pour code-server
-  const limitCheck = await checkAppLimit(yamId, 'code-server');
-  if (!limitCheck.canDeploy) {
-    return { error: limitCheck.error };
-  }
-
+const checkAppLimit = async (yamId: string, appType: string): Promise<{ canDeploy: boolean; error?: string }> => {
   try {
-    const project = await projectModule.service.create({
-      name,
-      type: 'code-server',
-      namespace,
-      workspaceId,
-      yamId
+    const existingApps = await prisma.project.count({
+      where: {
+        yamId,
+        type: appType,
+      },
     });
 
-    console.log('Code Server project created:', project)
-    return { success: true, project }
-
-  } catch(e) {
-    console.log(e)
-    if(e instanceof Error){
-      console.log(e.message)
-      return { error: e.message }
+    // Limite à 1 application du même type par YAM
+    if (existingApps >= 1) {
+      return {
+        canDeploy: false,
+        error: `You have reached the maximum number of deployments for (${appType}). Limit: 1`
+      };
     }
-    return { error: 'Error deploying Code Server' }
+
+    return { canDeploy: true };
+  } catch (error) {
+    console.error('Error checking app limit:', error);
+    return { canDeploy: false, error: 'Failed to verify deployment limits' };
   }
-}
-
-
-const checkAppLimit = async (yamId: string, appType: string): Promise<{ canDeploy: boolean; error?: string }> => {
-  const existingApps = await prisma.project.count({
-    where: {
-      yamId,
-      type: appType,
-    },
-  });
-
-  // Limite à 1 application du même type par YAM
-  if (existingApps >= 1) {
-    return {
-      canDeploy: false,
-      error: `You have reached the maximum number of deployments for this application (${appType}). Limit: 1`
-    };
-  }
-  return { canDeploy: true };
 };
 
-export const deployWordpressProjectAction = async ({name, namespace, yamId, workspaceId}: DeployProject) => {
+export const deployCodeServerProjectAction = async (data: DeployProject): Promise<ActionResult> => {
   const { userId } = await auth()
   const user = await currentUser()
 
   if (!user || !userId) {
-    return { error: 'No Logged In User' }
+    return {
+      success: false,
+      error: 'Authentication required',
+      code: 'UNAUTHORIZED'
+    };
   }
   
-  // Vérifier la limite pour WordPress
-  const limitCheck = await checkAppLimit(yamId, 'wordpress');
-  if (!limitCheck.canDeploy) {
-    return { error: limitCheck.error };
-  }
 
   try {
+    // Validate input
+    const validatedData = deployProjectSchema.parse(data);
+    
+    // Check deployment limits
+    const limitCheck = await checkAppLimit(validatedData.yamId, 'wordpress');
+    if (!limitCheck.canDeploy) {
+      return {
+        success: false,
+        error: limitCheck.error || 'Deployment limit exceeded',
+        code: 'DEPLOYMENT_LIMIT_EXCEEDED'
+      };
+    }
+
     const project = await projectModule.service.create({
-      name,
+      name: validatedData.name,
       type: 'wordpress',
-      namespace,
-      workspaceId,
-      yamId
+      namespace: validatedData.namespace,
+      workspaceId: validatedData.workspaceId,
+      yamId: validatedData.yamId
     });
 
-    console.log('WordPress project created:', project)
-    return { success: true, project }
+    console.log('WordPress project created:', project);
+    
+    return {
+      success: true,
+      data: project
+    };
 
-  } catch(e) {
-    console.log(e)
-    if(e instanceof Error){
-      console.log(e.message)
-      return { error: e.message }
-    }
-    return { error: 'Error deploying WordPress' }
+  } catch(error) {
+    return handleActionError(error, 'deployWordpressProjectAction');
   }
 }
 
-export const deployN8nProjectAction = async ({name, namespace, yamId, workspaceId}: DeployProject) => {
+export const deployWordpressProjectAction = async (data: DeployProject): Promise<ActionResult> => {
   const { userId } = await auth()
   const user = await currentUser()
 
   if (!user || !userId) {
-    return { error: 'No Logged In User' }
+    return {
+      success: false,
+      error: 'Authentication required',
+      code: 'UNAUTHORIZED'
+    };
   }
   
-  // Vérifier la limite pour n8n
-  const limitCheck = await checkAppLimit(yamId, 'n8n');
-  if (!limitCheck.canDeploy) {
-    return { error: limitCheck.error };
-  }
-
   try {
+    // Validate input
+    const validatedData = deployProjectSchema.parse(data);
+    
+    // Check deployment limits
+    const limitCheck = await checkAppLimit(validatedData.yamId, 'wordpress');
+    if (!limitCheck.canDeploy) {
+      return {
+        success: false,
+        error: limitCheck.error || 'Deployment limit exceeded',
+        code: 'DEPLOYMENT_LIMIT_EXCEEDED'
+      };
+    }
+
     const project = await projectModule.service.create({
-      name,
+      name: validatedData.name,
+      type: 'wordpress',
+      namespace: validatedData.namespace,
+      workspaceId: validatedData.workspaceId,
+      yamId: validatedData.yamId
+    });
+
+    console.log('WordPress project created:', project);
+    
+    return {
+      success: true,
+      data: project
+    };
+
+  } catch(error) {
+    return handleActionError(error, 'deployWordpressProjectAction');
+  }
+}
+
+export const deployN8nProjectAction = async (data: DeployProject): Promise<ActionResult> => {
+  const { userId } = await auth()
+  const user = await currentUser()
+
+  if (!user || !userId) {
+    return {
+      success: false,
+      error: 'Authentication required',
+      code: 'UNAUTHORIZED'
+    };
+  }
+  
+  try {
+    // Validate input
+    const validatedData = deployProjectSchema.parse(data);
+
+    // Vérifier la limite pour n8n
+    const limitCheck = await checkAppLimit(validatedData.yamId, 'n8n');
+    if (!limitCheck.canDeploy) {
+      return {
+        success: false,
+        error: limitCheck.error || 'Deployment limit exceeded',
+        code: 'DEPLOYMENT_LIMIT_EXCEEDED'
+      };
+    }
+
+    const project = await projectModule.service.create({
+      name: validatedData.name,
       type: 'n8n',
-      namespace,
-      workspaceId,
-      yamId
+      namespace: validatedData.namespace,
+      workspaceId: validatedData.workspaceId,
+      yamId: validatedData.yamId
     });
 
     console.log('n8n project created:', project)
-    return { success: true, project }
 
-  } catch(e) {
-    console.log(e)
-    if(e instanceof Error){
-      console.log(e.message)
-      return { error: e.message }
-    }
-    return { error: 'Error deploying n8n' }
+    return {
+      success: true,
+      data: project
+    };
+
+  } catch(error) {
+    return handleActionError(error, 'deployN8nProjectAction');
   }
 }
 
@@ -234,24 +344,35 @@ interface RemoveProjectParams {
   id: string;
 }
 
-export const removeProjectAction = async ({ id }: RemoveProjectParams) => {
+const removeProjectSchema = z.object({
+  id: z.string().min(1, 'Project ID is required'),
+});
+
+export const removeProjectAction = async (data: RemoveProjectParams): Promise<ActionResult> => {
   const { userId } = await auth();
   const user = await currentUser();
 
   if (!user || !userId) {
-    return { error: 'No Logged In User' };
+    return {
+      success: false,
+      error: 'Authentication required',
+      code: 'UNAUTHORIZED'
+    };
   }
 
   try {
+    // Validate input
+    const validatedData = removeProjectSchema.parse(data);
+    const { id } = validatedData;
     await projectModule.service.remove({ id });
     console.log('Project deleted:', id);
-    return { success: true };
-  } catch (e) {
-    console.error('Error deleting project:', e);
-    if (e instanceof Error) {
-      return { error: e.message };
-    }
-    return { error: 'Failed to delete project' };
+    
+    return {
+      success: true,
+      data: { id }
+    };
+  } catch (error) {
+    return handleActionError(error, 'removeProjectAction');
   }
 };
 

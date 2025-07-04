@@ -1,28 +1,46 @@
 import "@/styles/RightPanelDashboard.css";
 import "@/styles/DeployProject.css";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SelectYam } from "@/types/server";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import fetchYam from "@/libs/queries/fetch-yam";
 import {
   deployCodeServerProjectAction,
   deployWordpressProjectAction,
   deployN8nProjectAction,
+  type ActionResult
 } from "@/app/dashboard/_actions";
-import { useRouter } from "next/navigation";
 import CreateAnimation from "@/components/Home/CreateAnimation";
+import { toast } from "sonner";
 import Notification from "@/components/Notification/Notification";
 
 type Props = {
   expandRightPanel: boolean;
 };
 
+// Error types for better error handling
+type ErrorType = 'NETWORK' | 'VALIDATION' | 'DEPLOYMENT' | 'LIMIT_EXCEEDED' | 'UNAUTHORIZED' | 'UNKNOWN';
+
+interface DeploymentError {
+  type: ErrorType;
+  message: string;
+  code?: string;
+  userMessage: string;
+  actionable: boolean;
+}
+
+// Deployment state management
+type DeploymentState = 'idle' | 'deploying' | 'success' | 'error';
+
 const DeployProject = ({ expandRightPanel }: Props) => {
   const [yam, setYam] = useState<SelectYam>();
   const [showAnimation, setShowAnimation] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<DeploymentError | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deploymentType, setDeploymentType] = useState<string>("");
+  const [deploymentState, setDeploymentState] = useState<DeploymentState>('idle');
+
   const router = useRouter();
 
   const params = useParams();
@@ -42,7 +60,6 @@ const DeployProject = ({ expandRightPanel }: Props) => {
         setLoading(false);
       } catch (err) {
         console.error(err);
-        setError("Could not load yam. Please try again later.");
         toast.custom(() => <Notification title="Error !!!" description={"Could not load yam. Please try again later."} variant="error" />)
         setLoading(false);
       }
@@ -50,107 +67,235 @@ const DeployProject = ({ expandRightPanel }: Props) => {
     getWorkspaces();
   }, [slug]);
 
-  console.log(error);
+  // Error classification helper
+  // Error classification helper
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const classifyError = useCallback((error: any, actionResult?: ActionResult): DeploymentError => {
+    // Handle ActionResult errors
+    if (actionResult && !actionResult.success) {
+      const code = actionResult.code;
+      const message = actionResult.error || 'Unknown error occurred';
 
-  if (!yam) {
-    return null;
-  }
-
-  const handleDeployWordPress = async () => {
-    if (!yam) return;
-
-    setShowAnimation(true);
-
-    try {
-      const result = await deployWordpressProjectAction({
-        name: `wordpress-${Date.now()}`,
-        namespace: "default",
-        yamId: yam.id,
-        workspaceId: yam.workspaceId,
-      });
-
-      if (result.success) {
-        toast.custom(() => <Notification title="Success !!!" description="WordPress deployment created successfully!" variant="success" />)
-        setShowAnimation(false);
-        setTimeout(() => {
-          router.back();
-        }, 5000);
-      } else if (result.error) {
-        // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
-        setShowAnimation(false);
-        console.error("WordPress deployment error:", result.error);
-        toast.custom(() => <Notification title="Error !!!" description={result.error} variant="error" />)
+      switch (code) {
+        case 'UNAUTHORIZED':
+          return {
+            type: 'UNAUTHORIZED',
+            message,
+            code,
+            userMessage: 'Your session has expired. Please sign in again.',
+            actionable: true
+          };
+        case 'VALIDATION_ERROR':
+          return {
+            type: 'VALIDATION',
+            message,
+            code,
+            userMessage: 'There was an issue with the deployment configuration. Please try again.',
+            actionable: true
+          };
+        case 'DEPLOYMENT_LIMIT_EXCEEDED':
+          return {
+            type: 'LIMIT_EXCEEDED',
+            message,
+            code,
+            userMessage: message, // Use the specific limit message from backend
+            actionable: false
+          };
+        case 'DEPLOYMENT_FAILED':
+          return {
+            type: 'DEPLOYMENT',
+            message,
+            code,
+            userMessage: 'The deployment failed due to a technical issue. Our team has been notified.',
+            actionable: true
+          };
+        default:
+          return {
+            type: 'UNKNOWN',
+            message,
+            code,
+            userMessage: 'An unexpected error occurred. Please try again or contact support if the issue persists.',
+            actionable: true
+          };
       }
-    } catch (error) {
-      setShowAnimation(false);
-      console.error("Failed to deploy WordPress:", error);
-      toast.custom(() => <Notification title="Error !!!" description={"Failed to deploy WordPress. Please try again."} variant="error" />)
+    }
+
+    // Handle network and other errors
+    if (error?.name === 'TypeError' && error?.message?.includes('fetch')) {
+      return {
+        type: 'NETWORK',
+        message: error.message,
+        userMessage: 'Unable to connect to our servers. Please check your internet connection and try again.',
+        actionable: true
+      };
+    }
+
+    if (error?.message?.includes('timeout')) {
+      return {
+        type: 'NETWORK',
+        message: error.message,
+        userMessage: 'The request took too long to complete. Please try again.',
+        actionable: true
+      };
+    }
+
+    // Default error
+    return {
+      type: 'UNKNOWN',
+      message: error?.message || 'Unknown error',
+      userMessage: 'Something went wrong. Please try again or contact support if the issue continues.',
+      actionable: true
+    };
+  }, []);
+
+  // Enhanced error handling with user-friendly messages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleError = useCallback((error: any, context: string, actionResult?: ActionResult) => {
+    console.error(`${context} error:`, error);
+    
+    const deploymentError = classifyError(error, actionResult);
+    setError(deploymentError);
+    setDeploymentState('error');
+    setShowAnimation(false);
+
+    // Show appropriate toast notification
+    const toastTitle = getErrorTitle(deploymentError.type);
+
+    toast.custom(() => (
+      <Notification 
+        title={toastTitle} 
+        description={deploymentError.userMessage} 
+        variant="error" 
+      />
+    ));
+
+    // Handle specific error types
+    if (deploymentError.type === 'UNAUTHORIZED') {
+      // Redirect to login after a short delay
+      setTimeout(() => {
+        router.push('/auth/sign-in');
+      }, 2000);
+    }
+  }, [classifyError, router]);
+
+  // Get user-friendly error titles
+  const getErrorTitle = (errorType: ErrorType): string => {
+    switch (errorType) {
+      case 'NETWORK':
+        return 'Connection Error';
+      case 'VALIDATION':
+        return 'Configuration Error';
+      case 'DEPLOYMENT':
+        return 'Deployment Failed';
+      case 'LIMIT_EXCEEDED':
+        return 'Deployment Limit Reached';
+      case 'UNAUTHORIZED':
+        return 'Session Expired';
+      default:
+        return 'Error';
     }
   };
 
-  const handleDeployCodeServer = async () => {
-    if (!yam) return;
+  // Fetch YAM data with error handling
+  const fetchYamData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      console.log("DeployProject: Fetching YAM with slug:", slug);
+      const data = await fetchYam({ name: slug });
+      
+      if (!data) {
+        throw new Error('YAM not found');
+      }
+      
+      setYam(data);
+    } catch (err) {
+      handleError(err, 'Fetch YAM');
+    } finally {
+      setLoading(false);
+    }
+  }, [slug, handleError]);
 
+  useEffect(() => {
+    fetchYamData();
+  }, [fetchYamData]);
+
+  // Redirect if no YAM found
+  useEffect(() => {
+    if (!loading && !yam && !error) {
+      router.push("/dashboard");
+    }
+  }, [loading, yam, error, router]);
+
+  // Generic deployment handler
+  const handleDeployment = useCallback(async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    deploymentAction: (params: any) => Promise<ActionResult>,
+    appType: string,
+    displayName: string
+  ) => {
+    if (!yam) {
+      handleError(new Error('YAM configuration not available'), 'Deployment validation');
+      return;
+    }
+
+    if (deploymentState === 'deploying') {
+      console.warn('Deployment already in progress');
+      return;
+    }
+
+    setDeploymentState('deploying');
     setShowAnimation(true);
+    setError(null);
+    setDeploymentType(displayName);
+
+    const deploymentParams = {
+      name: `${appType}-${Date.now()}`,
+      namespace: "default",
+      yamId: yam.id,
+      workspaceId: yam.workspaceId,
+    };
 
     try {
-      const result = await deployCodeServerProjectAction({
-        name: `codeserver-${Date.now()}`,
-        namespace: "default",
-        yamId: yam.id,
-        workspaceId: yam.workspaceId,
-      });
+      console.log(`Starting ${displayName} deployment:`, deploymentParams);
+      
+      const result = await deploymentAction(deploymentParams);
 
       if (result.success) {
-        toast.custom(() => <Notification title="Success !!!" description="CodeServer deployment created successfully!" variant="success" />)
-        setShowAnimation(false);
+        setDeploymentState('success');
+        toast.custom(() => (
+          <Notification 
+            title="Deployment Started!" 
+            description={`${displayName} is being deployed. You'll be redirected shortly.`} 
+            variant="success" 
+          />
+        ));
+        
+        // Auto-redirect after success
         setTimeout(() => {
           router.back();
-        }, 5000);
-      } else if (result.error) {
-        // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
-        setShowAnimation(false);
-        console.error("CodeServer deployment error:", result.error);
-        toast.custom(() => <Notification title="Error !!!" description={result.error} variant="error" />)
+        }, 3000);
+      } else {
+        handleError(new Error(result.error), `${displayName} deployment`, result);
       }
     } catch (error) {
-      setShowAnimation(false);
-      console.error("Failed to deploy CodeServer:", error);
-      toast.custom(() => <Notification title="Error !!!" description="Failed to deploy CodeServer. Please try again." variant="error" />)
+      handleError(error, `${displayName} deployment`);
     }
-  };
+  }, [yam, deploymentState, handleError, router]);
 
-  const handleDeployN8n = async () => {
-    if (!yam) return;
+  // Specific deployment handlers
+  const handleDeployWordPress = useCallback(() => {
+    handleDeployment(deployWordpressProjectAction, 'wordpress', 'WordPress');
+  }, [handleDeployment]);
 
-    setShowAnimation(true);
+  const handleDeployCodeServer = useCallback(() => {
+    handleDeployment(deployCodeServerProjectAction, 'codeserver', 'VSCode Server');
+  }, [handleDeployment]);
 
-    try {
-      const result = await deployN8nProjectAction({
-        name: `n8n-${Date.now()}`,
-        namespace: "default",
-        yamId: yam.id,
-        workspaceId: yam.workspaceId,
-      });
-
-      if (result.success) {
-        toast.custom(() => <Notification title="Success !!!" description="n8n deployment created successfully!" variant="success" />)
-        setShowAnimation(false);
-        setTimeout(() => {
-          router.back();
-        }, 5000);
-      } else if (result.error) {
-        // Gérer les erreurs spécifiques comme les limites de déploiement atteintes
-        setShowAnimation(false);
-        console.error("n8n deployment error:", result.error);
-        toast.custom(() => <Notification title="Error !!!" description={result.error} variant="error" />)
-      }
-    } catch (error) {
-      setShowAnimation(false);
-      console.error("Failed to deploy n8n:", error);
-      toast.custom(() => <Notification title="Error !!!" description="Failed to deploy n8n. Please try again." variant="error" />)
-    }
-  };
+  const handleDeployN8n = useCallback(() => {
+    handleDeployment(deployN8nProjectAction, 'n8n', 'n8n');
+  }, [handleDeployment]);
 
   const loadingTxts = [
     "Provisioning resources...",
@@ -159,7 +304,7 @@ const DeployProject = ({ expandRightPanel }: Props) => {
     "Almost done!",
   ];
 
-  const animationTitle = "We’re preparing your deployment—hang tight!";
+  const animationTitle = `We’re preparing your ${deploymentType} deployment tight!`;
 
   return (
     <div
